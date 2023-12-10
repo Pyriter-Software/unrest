@@ -1,4 +1,4 @@
-import { StatusType } from './statusType';
+import { StatusType } from '../model/statusType';
 
 export interface ResponseProps {
   statusCode: StatusType;

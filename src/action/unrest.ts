@@ -1,15 +1,15 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { Route } from './route';
-import { Handler } from './handler';
-import { MethodType } from './methodType';
-import { Response } from './response';
-import { Request } from './request';
-import { GetHandler } from './getHandler';
-import { extractBody, extractOrigin, extractPath } from './utils';
-import { Context } from './context';
-import { Header } from './header';
+import { Route } from '../model/route';
+import { Header } from '../model/header';
+import { GetHandler } from '../handler/getHandler';
+import { Handler } from '../handler/handler';
+import { Context } from 'vm';
+import { extractBody, extractOrigin, extractPath } from '../utils/utils';
+import { MethodType } from '../model/methodType';
+import { Response } from '../model/response';
+import { Request } from '../model/request';
 
-export interface Props {
+export interface UnrestProps {
   routes: Route[];
   headers: Header[];
 }
@@ -24,7 +24,7 @@ export class Unrest {
   private readonly routingTable = new Map<string, Route[]>();
   private readonly headers: Header[] = [];
 
-  constructor(props: Props) {
+  constructor(props: UnrestProps) {
     this.buildRoutingTable(props.routes);
     this.getHandler = new GetHandler({
       routingTable: this.routingTable,

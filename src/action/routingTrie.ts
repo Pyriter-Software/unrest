@@ -1,5 +1,5 @@
-import { Route } from './route';
-import { RequestPath } from './requestPath';
+import { Route } from '../model/route';
+import { RequestPath } from '../handler/requestPath';
 
 class Node {
   constructor(

@@ -1,5 +1,5 @@
 import { RoutingTrie } from './routingTrie';
-import { Response } from './response';
+import { Response } from '../model/response';
 
 describe('routingTrie', () => {
   const routingTrie = new RoutingTrie();

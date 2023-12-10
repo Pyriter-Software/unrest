@@ -1,7 +1,7 @@
-import { MethodType } from './methodType';
-import { Response } from './response';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { Unrest } from './unrest';
+import { Response } from '../model/response';
+import { MethodType } from '../model/methodType';
 
 describe('unrest', () => {
   const unrest = Unrest.builder()

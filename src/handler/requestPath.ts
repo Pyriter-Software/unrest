@@ -1,4 +1,4 @@
-import { Route } from './route';
+import { Route } from '../model/route';
 
 export class RequestPath {
   constructor(

@@ -1,9 +1,9 @@
-import { Response } from './response';
-import { Request } from './request';
-import { RoutingTrie } from './routingTrie';
-import { MethodType } from './methodType';
-import { Route } from './route';
 import { RequestPath } from './requestPath';
+import { Route } from '../model/route';
+import { RoutingTrie } from '../action/routingTrie';
+import { MethodType } from '../model/methodType';
+import { Request } from '../model/request';
+import { Response } from '../model/response';
 
 export interface Props {
   routingTable: Map<string, Route[]>;
