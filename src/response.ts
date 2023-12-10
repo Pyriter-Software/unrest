@@ -3,10 +3,10 @@ import { StatusType } from './statusType';
 export interface ResponseProps {
   statusCode: StatusType;
   body: object | string | number | undefined | boolean;
-  headers: Headers;
+  headers: ResponseHeaders;
 }
 
-export interface Headers {
+export interface ResponseHeaders {
   [key: string]: string;
 }
 
@@ -21,7 +21,7 @@ export class Response {
     return this.props.body;
   }
 
-  get headers() {
+  get headers(): ResponseHeaders {
     return this.props.headers;
   }
 
@@ -33,7 +33,7 @@ export class Response {
 export class ResponseBuilder {
   private statusCode?: StatusType;
   private body?: string | object | undefined | number | boolean;
-  private headers: Headers = {};
+  private headers: ResponseHeaders = {};
 
   withStatusCode(value: number): ResponseBuilder {
     this.statusCode = value;

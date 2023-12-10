@@ -109,7 +109,18 @@ class UnrestBuilder {
   }
 
   withHeader(header: Header) {
-    this.headers.push(header);
+    if (header != null) {
+      this.headers.push(header);
+    } else {
+      throw new Error('header number be defined');
+    }
+    return this;
+  }
+
+  withHeaderIfDefinedOrDoNothing(header: Header) {
+    if (header != null) {
+      this.headers.push(header);
+    }
     return this;
   }
 
