@@ -1,8 +1,20 @@
-import { RequestPath, Route } from './route';
+import { Route } from './route';
 
-export class RequestPathBuilder {
-  private path: string;
-  private route: Route;
+export class RequestPath {
+  constructor(
+    public path: string,
+    public route: Route,
+    public params: string[],
+  ) {}
+
+  static builder() {
+    return new RequestPathBuilder();
+  }
+}
+
+class RequestPathBuilder {
+  private path?: string;
+  private route?: Route;
   private params: string[] = [];
 
   withPath(path: string) {

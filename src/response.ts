@@ -1,10 +1,9 @@
 import { StatusType } from './statusType';
-import { ResponseBuilder } from './responseBuilder';
 
 export interface ResponseProps {
   statusCode: StatusType;
   body: object | string | number | undefined | boolean;
-  headers?: Headers;
+  headers: Headers;
 }
 
 export interface Headers {
@@ -12,8 +11,7 @@ export interface Headers {
 }
 
 export class Response {
-  constructor(public props: ResponseProps) {
-  }
+  constructor(public props: ResponseProps) {}
 
   get statusCode() {
     return this.props.statusCode;
@@ -27,10 +25,36 @@ export class Response {
     return this.props.headers;
   }
 
-  withHeader(key: string, value: string) {
+  static builder(): ResponseBuilder {
+    return new ResponseBuilder();
+  }
+}
+
+export class ResponseBuilder {
+  private statusCode?: StatusType;
+  private body?: string | object | undefined | number | boolean;
+  private headers: Headers = {};
+
+  withStatusCode(value: number): ResponseBuilder {
+    this.statusCode = value;
+    return this;
+  }
+
+  withBody(
+    value: string | object | undefined | number | boolean,
+  ): ResponseBuilder {
+    if (typeof value === 'object') {
+      this.body = JSON.stringify(value);
+    } else {
+      this.body = value;
+    }
+    return this;
+  }
+
+  withHeader(key: string, value: string): ResponseBuilder {
     if (key !== undefined) {
       if (value !== undefined) {
-        this.props.headers[key] = value;
+        this.headers[key] = value;
       }
     } else {
       throw new Error('key must be defined');
@@ -38,12 +62,14 @@ export class Response {
     return this;
   }
 
-  static builder(): ResponseBuilder {
-    return new ResponseBuilder();
+  build(): Response {
+    if (this.statusCode == null) {
+      throw new Error('statusCode must be defined');
+    }
+    return new Response({
+      statusCode: this.statusCode,
+      body: this.body,
+      headers: this.headers,
+    });
   }
 }
-
-
-
-
-

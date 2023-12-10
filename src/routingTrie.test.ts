@@ -1,43 +1,41 @@
 import { RoutingTrie } from './routingTrie';
+import { Response } from './response';
 
 describe('routingTrie', () => {
   const routingTrie = new RoutingTrie();
   beforeAll(() => {
     routingTrie.insert({
       handler: () => {
-        return Promise.resolve(undefined);
+        return Promise.resolve({} as Response);
       },
       path: '/foo',
       method: 'GET',
     });
     routingTrie.insert({
-        handler: () => {
-          return Promise.resolve(undefined);
-        },
-        path: '/foo/{bar}',
-        method: 'GET',
+      handler: () => {
+        return Promise.resolve({} as Response);
       },
-    );
+      path: '/foo/{bar}',
+      method: 'GET',
+    });
     routingTrie.insert({
-        handler: () => {
-          return Promise.resolve(undefined);
-        },
-        path: '/foo/{bar}/hello',
-        method: 'GET',
+      handler: () => {
+        return Promise.resolve({} as Response);
       },
-    );
+      path: '/foo/{bar}/hello',
+      method: 'GET',
+    });
     routingTrie.insert({
-        handler: () => {
-          return Promise.resolve(undefined);
-        },
-        path: '/foo/{bar}/hello/{world}',
-        method: 'GET',
+      handler: () => {
+        return Promise.resolve({} as Response);
       },
-    );
+      path: '/foo/{bar}/hello/{world}',
+      method: 'GET',
+    });
   });
   describe('get', () => {
     test('get basic route', () => {
-      const requestPath = routingTrie.get('/foo');
+      const requestPath = routingTrie.get('/foo')!!;
 
       expect(requestPath.path).toEqual('/foo');
       expect(requestPath.params.length).toEqual(0);
@@ -47,7 +45,7 @@ describe('routingTrie', () => {
     });
 
     test('get route with one argument', () => {
-      const requestPath = routingTrie.get('/foo/123');
+      const requestPath = routingTrie.get('/foo/123')!!;
 
       expect(requestPath.path).toEqual('/foo/123');
       expect(requestPath.params.length).toEqual(1);
@@ -58,7 +56,7 @@ describe('routingTrie', () => {
     });
 
     test('get route with one argument that is also the argument name', () => {
-      const requestPath = routingTrie.get('/foo/{bar}');
+      const requestPath = routingTrie.get('/foo/{bar}')!!;
 
       expect(requestPath.path).toEqual('/foo/{bar}');
       expect(requestPath.params.length).toEqual(1);

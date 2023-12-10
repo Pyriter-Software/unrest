@@ -1,5 +1,4 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { UnrestBuilder } from './unrestBuilder';
 import { Route } from './route';
 import { Handler } from './handler';
 import { MethodType } from './methodType';
@@ -7,22 +6,23 @@ import { Response } from './response';
 import { Request } from './request';
 import { GetHandler } from './getHandler';
 import { extractBody, extractOrigin, extractPath } from './utils';
-
-export const ACCESS_CONTROL_ALLOW_ORIGIN = 'Access-Control-Allow-Origin';
-const allowedOrigins = new Set(['https://beta.rezuned.com', 'https://rezuned.com', 'http://localhost:3000']);
+import { Context } from './context';
+import { Header } from './header';
 
 export interface Props {
   routes: Route[];
+  headers: Header[];
 }
 
-export default class Unrest {
-  static builder() {
+export class Unrest {
+  static builder(): UnrestBuilder {
     return new UnrestBuilder();
   }
 
   private readonly getHandler: GetHandler;
   private readonly handlers: Handler[];
   private readonly routingTable = new Map<string, Route[]>();
+  private readonly headers: Header[] = [];
 
   constructor(props: Props) {
     this.buildRoutingTable(props.routes);
@@ -30,6 +30,20 @@ export default class Unrest {
       routingTable: this.routingTable,
     });
     this.handlers = [this.getHandler];
+    this.headers = this.headers.concat(props.headers);
+  }
+
+  async execute(event: APIGatewayProxyEvent): Promise<Response> {
+    const context: Context = {
+      event,
+      request: this.convertToRequest(event),
+      responseBuilder: Response.builder(),
+    };
+
+    this.updateResponseHeader(context);
+    await this.callHandler(context);
+
+    return context.responseBuilder.build();
   }
 
   private buildRoutingTable(routes: Route[]) {
@@ -40,7 +54,7 @@ export default class Unrest {
     });
   }
 
-  convertToRequest(event: APIGatewayProxyEvent): Request {
+  private convertToRequest(event: APIGatewayProxyEvent): Request {
     const origin = extractOrigin(event);
     const path = extractPath(event);
     const body = extractBody(event);
@@ -54,32 +68,55 @@ export default class Unrest {
     };
   }
 
-  async execute(event: APIGatewayProxyEvent): Promise<Response> {
-    const responseBuilder = Response.builder();
-    const request: Request = this.convertToRequest(event);
-    const { origin } = request;
-    const accessControllAllowOrigin = this.generateAccessControlAllowOrigin(origin);
-    if (accessControllAllowOrigin) {
-      responseBuilder.withHeader(ACCESS_CONTROL_ALLOW_ORIGIN, accessControllAllowOrigin);
-    }
+  private updateResponseHeader(context: Context) {
+    const { responseBuilder } = context;
+    this.headers.forEach((header) => {
+      const { key, value } = header;
+      responseBuilder.withHeader(key, value);
+    });
+  }
 
+  private async callHandler(context: Context): Promise<void> {
+    const { responseBuilder, request } = context;
     try {
       const handler = this.handlers.find((h) => h.canHandle(request));
       if (handler) {
-        const handlerResponse = await handler.handle(request);
-        if (accessControllAllowOrigin) {
-          handlerResponse.withHeader(ACCESS_CONTROL_ALLOW_ORIGIN, accessControllAllowOrigin);
-        }
-        return handlerResponse;
+        const { statusCode, body } = await handler.handle(request);
+        responseBuilder.withStatusCode(statusCode).withBody(body);
       } else {
-        return responseBuilder.withStatusCode(404).build();
+        const message = JSON.stringify({
+          message: 'Not found',
+        });
+        responseBuilder.withStatusCode(404).withBody(message);
       }
-    } catch (e) {
-      return responseBuilder.withStatusCode(500).build();
+    } catch (e: any) {
+      const message = JSON.stringify({
+        message: e.message,
+        stack: e.stack,
+      });
+      responseBuilder.withStatusCode(500).withBody(message);
     }
   }
+}
 
-  private generateAccessControlAllowOrigin(origin: string | undefined): string | undefined {
-    return origin && allowedOrigins.has(origin) ? origin : undefined;
+class UnrestBuilder {
+  private routes: Route[] = [];
+  private headers: Header[] = [];
+
+  withRoute(route: Route) {
+    this.routes.push(route);
+    return this;
+  }
+
+  withHeader(header: Header) {
+    this.headers.push(header);
+    return this;
+  }
+
+  build() {
+    return new Unrest({
+      routes: this.routes,
+      headers: this.headers,
+    });
   }
 }

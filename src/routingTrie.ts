@@ -1,20 +1,23 @@
-import { Route, RequestPath } from './route';
-
+import { Route } from './route';
+import { RequestPath } from './requestPath';
 
 class Node {
-  constructor(public value: string, public children: Node[], public route?: Route, isWildCard: boolean = false, wildCardKey?: string) {
-  }
+  constructor(
+    public value: string,
+    public children: Node[],
+    public route?: Route,
+    public isWildCard: boolean = false,
+    public wildCardKey?: string,
+  ) {}
 }
 
-const ROOT_NODE = new Node('/', [], null);
+const ROOT_NODE = new Node('/', [], undefined);
 
-// tslint:disable-next-line:max-classes-per-file
 export class RoutingTrie {
-  public root: Node;
-  private cache: Map<string, Route>;
+  public root?: Node;
 
   constructor(routes: Route[] = []) {
-    routes.forEach(route => this.insert(route));
+    routes.forEach((route) => this.insert(route));
   }
 
   insert(route: Route) {
@@ -36,14 +39,15 @@ export class RoutingTrie {
       const char = path[i];
 
       const { children } = currentNode;
-      let nextNode = children.find(node => node.value === char);
+      let nextNode = children.find((node) => node.value === char);
 
-      if (nextNode == null) { // Add a new character
+      if (nextNode == null) {
+        // Add a new character
         // If the new character starts with a { , then we need to change that to a star
         if (char === '{') {
-          // Get all the characters until } and store this string value to the arguments list
+          // Get all the characters until '}' and store this string value to the arguments list
           i++;
-          const keyBuilder = [];
+          const keyBuilder: string[] = [];
           while (path[i] !== '}') {
             keyBuilder.push(path[i]);
             i++;
@@ -52,19 +56,29 @@ export class RoutingTrie {
 
           const key = keyBuilder.join('');
           if (char2 !== '}') {
-            throw new Error(`An opening brace '{' must end with a closing brace for ${key}`);
+            throw new Error(
+              `An opening brace '{' must end with a closing brace for ${key}`,
+            );
           }
 
-          nextNode = new Node('*', [], null, true, key);
-          if (currentNode.children.filter(n => n.value !== '*').length > 0) throw new Error(`Ambiguous path params. Trying to treat this position as a * but also found ${JSON.stringify(currentNode.children)}`);
+          nextNode = new Node('*', [], undefined, true, key);
+          if (
+            currentNode.children.filter((n) => n.value !== '*').length > 0
+          )
+            throw new Error(
+              `Ambiguous path params. Trying to treat this position as a * but also found ${JSON.stringify(
+                currentNode.children,
+              )}`,
+            );
           currentNode.children.push(nextNode);
         } else {
-          nextNode = new Node(char, [], null);
+          nextNode = new Node(char, [], undefined);
           currentNode.children.push(nextNode);
         }
       }
 
-      if (i + 1 >= path.length) { // At end of path
+      if (i + 1 >= path.length) {
+        // At end of path
         nextNode.route = route;
       }
 
@@ -73,17 +87,18 @@ export class RoutingTrie {
     }
   }
 
-  get(path: string): RequestPath | undefined {
+  get(path: string): RequestPath | undefined | null {
     let i = 0;
+    if (this.root == null) return null;
     let currentNode = this.root;
     const requestPathBuilder = RequestPath.builder().withPath(path);
     while (i < path.length) {
       const char = path[i];
-      const { value, children, route } = currentNode || {};
+      const { value, children } = currentNode;
 
       if (value === '*') {
         // If value is * then we want to gobble update all the text in the request path a
-        const paramBuilder = [];
+        const paramBuilder: string[] = [];
         while (i < path.length) {
           if (path[i] === '/') break;
           paramBuilder.push(path[i]);
@@ -100,14 +115,17 @@ export class RoutingTrie {
 
       // Next character operation
       const nextChar = path[nextIndex];
-      const nextNode = children.find(node => node.value === '*') ||
-        children.find(node => node.value === nextChar);
+      const nextNode =
+        children.find((node) => node.value === '*') ||
+        children.find((node) => node.value === nextChar);
 
       if (nextNode == null) return null;
 
       currentNode = nextNode;
       i = nextIndex;
     }
+
+    if (currentNode.route == null) return null;
 
     return requestPathBuilder.withRoute(currentNode.route).build();
   }
