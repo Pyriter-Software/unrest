@@ -1,5 +1,5 @@
 export enum MethodType {
   GET = 'GET',
   POST = 'POST',
-  PUT = 'PUT'
+  PUT = 'PUT',
 }

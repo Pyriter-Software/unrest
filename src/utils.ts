@@ -1,7 +1,11 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 
-export function extractOrigin(event: APIGatewayProxyEvent): string | undefined {
-  return event && event.headers && event.headers.origin ? event.headers.origin : undefined;
+export function extractOrigin(
+  event: APIGatewayProxyEvent,
+): string | undefined {
+  return event && event.headers && event.headers.origin
+    ? event.headers.origin
+    : undefined;
 }
 
 export function extractPath(event: APIGatewayProxyEvent): string {
