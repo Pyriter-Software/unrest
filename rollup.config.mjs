@@ -5,8 +5,7 @@ export default {
   output: {
     sourcemap: true,
     dir: "dist",
-    format: "umd",
-    name: "unrest"
+    format: "es",
   },
   plugins: [typescript()]
 };
