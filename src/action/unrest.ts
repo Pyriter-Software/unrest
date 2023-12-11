@@ -117,7 +117,7 @@ class UnrestBuilder {
     return this;
   }
 
-  withHeaderIfDefinedOrDoNothing(header: Header) {
+  withHeaderIfDefinedOrDoNothing(header?: Header) {
     if (header != null) {
       this.headers.push(header);
     }
