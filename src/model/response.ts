@@ -47,14 +47,19 @@ export class ResponseBuilder {
     return this;
   }
 
-  withBody(value: string | undefined): ResponseBuilder {
-    if (
-      value != null &&
-      (typeof value === 'string' || (value as any) instanceof String)
+  withBody(
+    value: string | undefined | object | boolean | number,
+  ): ResponseBuilder {
+    if (value == null) return this;
+    else if (
+      typeof value === 'string' ||
+      (value as any) instanceof String
     ) {
-      this.body = value;
+      this.body = value as string;
+    } else if (typeof value === 'object') {
+      this.body = JSON.stringify(value);
     } else {
-      throw new TypeError('value must be of type string or undefined');
+      this.body = String(value);
     }
     return this;
   }
