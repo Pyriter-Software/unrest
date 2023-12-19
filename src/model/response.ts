@@ -3,7 +3,7 @@ import { UnrestResponse } from './unrestResponse';
 
 export interface ResponseProps {
   statusCode: StatusType;
-  body: object | string | number | undefined | boolean;
+  body?: string | undefined;
   headers: ResponseHeaders;
 }
 
@@ -39,7 +39,7 @@ export class Response {
 
 export class ResponseBuilder {
   private statusCode?: StatusType;
-  private body?: string | object | undefined | number | boolean;
+  private body?: string;
   private headers: ResponseHeaders = {};
 
   withStatusCode(value: number): ResponseBuilder {
@@ -47,13 +47,14 @@ export class ResponseBuilder {
     return this;
   }
 
-  withBody(
-    value: string | object | undefined | number | boolean,
-  ): ResponseBuilder {
-    if (typeof value === 'object') {
-      this.body = JSON.stringify(value);
-    } else {
+  withBody(value: string | undefined): ResponseBuilder {
+    if (
+      value != null &&
+      (typeof value === 'string' || (value as any) instanceof String)
+    ) {
       this.body = value;
+    } else {
+      throw new TypeError('value must be of type string or undefined');
     }
     return this;
   }
