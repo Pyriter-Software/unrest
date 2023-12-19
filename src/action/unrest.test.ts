@@ -29,6 +29,10 @@ describe('unrest', () => {
     } as APIGatewayProxyEvent;
     const response = await unrest.execute(event);
 
+    let responseString = JSON.stringify(response);
+    expect(responseString).toEqual(
+      `{"statusCode":200,"body":"success","headers":{"Access-Control-Allow-Origin":"http://localhost"}}`,
+    );
     expect(response).toBeDefined();
     expect(response.statusCode).toEqual(200);
     expect(response.body).toEqual('success');

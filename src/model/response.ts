@@ -29,7 +29,7 @@ export class Response {
     return new ResponseBuilder();
   }
 
-  toJson(): Response {
+  toJSON(): Response {
     return {
       ...this.props,
     } as Response;
