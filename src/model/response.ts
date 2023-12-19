@@ -1,4 +1,5 @@
 import { StatusType } from '../model/statusType';
+import { UnrestResponse } from './unrestResponse';
 
 export interface ResponseProps {
   statusCode: StatusType;
@@ -29,10 +30,10 @@ export class Response {
     return new ResponseBuilder();
   }
 
-  toJSON(): Response {
+  toJSON(): UnrestResponse {
     return {
       ...this.props,
-    } as Response;
+    };
   }
 }
 

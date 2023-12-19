@@ -8,6 +8,7 @@ import { extractBody, extractOrigin, extractPath } from '../utils/utils';
 import { MethodType } from '../model/methodType';
 import { Response } from '../model/response';
 import { Request } from '../model/request';
+import { UnrestResponse } from '../model/unrestResponse';
 
 export interface UnrestProps {
   routes: Route[];
@@ -33,7 +34,7 @@ export class Unrest {
     this.headers = this.headers.concat(props.headers);
   }
 
-  async execute(event: APIGatewayProxyEvent): Promise<Response> {
+  async execute(event: APIGatewayProxyEvent): Promise<UnrestResponse> {
     const context: Context = {
       event,
       request: this.convertToRequest(event),
@@ -43,7 +44,7 @@ export class Unrest {
     this.updateResponseHeader(context);
     await this.callHandler(context);
 
-    return context.responseBuilder.build();
+    return context.responseBuilder.build().toJSON();
   }
 
   private buildRoutingTable(routes: Route[]) {
