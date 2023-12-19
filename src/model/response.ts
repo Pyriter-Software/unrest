@@ -11,7 +11,7 @@ export interface ResponseHeaders {
 }
 
 export class Response {
-  constructor(public props: ResponseProps) {}
+  constructor(private props: ResponseProps) {}
 
   get statusCode() {
     return this.props.statusCode;
@@ -27,6 +27,12 @@ export class Response {
 
   static builder(): ResponseBuilder {
     return new ResponseBuilder();
+  }
+
+  toJson(): Response {
+    return {
+      ...this.props,
+    } as Response;
   }
 }
 
