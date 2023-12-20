@@ -1,14 +1,16 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { Route } from '../model/route';
 import { Header } from '../model/header';
-import { GetHandler } from '../handler/getHandler';
-import { Handler } from '../handler/handler';
 import { Context } from 'vm';
 import { extractBody, extractOrigin, extractPath } from '../utils/utils';
 import { MethodType } from '../model/methodType';
 import { Response } from '../model/response';
 import { Request } from '../model/request';
 import { UnrestResponse } from '../model/unrestResponse';
+import { GetHandler } from '../handler/typeHandler/getHandler';
+import { Handler } from '../handler';
+import { PostHandler } from '../handler/typeHandler/postHandler';
+import { PutHandler } from '../handler/typeHandler/putHandler';
 
 export interface UnrestProps {
   routes: Route[];
@@ -21,6 +23,9 @@ export class Unrest {
   }
 
   private readonly getHandler: GetHandler;
+  private readonly postHandler: PostHandler;
+  private readonly putHandler: PutHandler;
+
   private readonly handlers: Handler[];
   private readonly routingTable = new Map<string, Route[]>();
   private readonly headers: Header[] = [];
@@ -30,7 +35,14 @@ export class Unrest {
     this.getHandler = new GetHandler({
       routingTable: this.routingTable,
     });
-    this.handlers = [this.getHandler];
+    this.postHandler = new PostHandler({
+      routingTable: this.routingTable,
+    });
+    this.putHandler = new PutHandler({
+      routingTable: this.routingTable,
+    });
+
+    this.handlers = [this.getHandler, this.postHandler, this.putHandler];
     this.headers = this.headers.concat(props.headers);
   }
 
