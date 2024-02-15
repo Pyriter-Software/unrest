@@ -70,7 +70,7 @@ export class Unrest {
   private convertToRequest<T>(event: APIGatewayProxyEvent): Request<T> {
     const origin = extractOrigin(event);
     const path = extractPath(event);
-    const body = extractBody(event) as T;
+    const body = extractBody<T>(event);
 
     return {
       origin,

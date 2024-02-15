@@ -44,9 +44,10 @@ export abstract class Handler {
 
     const { route, params } = requestPath;
 
-    const response: Response = await route.handler.apply(
-      route.thisReference,
-      // @ts-ignore
+    const response: Response = await route.handler.call(
+      this,
+      request,
+      route,
       params,
     );
 

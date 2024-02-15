@@ -2,6 +2,7 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 import { Unrest } from './unrest';
 import { Response } from '../model/response';
 import { MethodType } from '../model/methodType';
+import { Request } from '../model/request';
 
 describe('unrest', () => {
   const unrest = Unrest.builder()
@@ -17,10 +18,11 @@ describe('unrest', () => {
       path: '/ping',
     })
     .withRoute({
-      handler: () => {
+      handler: (request: Request<string>) => {
+        const { body } = request;
         const response: Response = Response.builder()
           .withStatusCode(200)
-          .withBody('success')
+          .withBody(body)
           .build();
         return Promise.resolve(response);
       },
@@ -53,8 +55,9 @@ describe('unrest', () => {
     const event = {
       httpMethod: 'POST',
       path: '/hello',
+      body: 'success',
     } as APIGatewayProxyEvent;
-    const response = await unrest.execute<undefined>(event);
+    const response = await unrest.execute<string>(event);
 
     let responseString = JSON.stringify(response);
     expect(responseString).toEqual(

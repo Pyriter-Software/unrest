@@ -19,6 +19,10 @@ export function extractRouteInfo(path: string): string[] {
     .map(decodeURI);
 }
 
-export function extractBody(event: APIGatewayProxyEvent): any {
-  return event && event.body ? JSON.parse(event.body) : undefined;
+export function extractBody<T>(event: APIGatewayProxyEvent): T {
+  try {
+    return JSON.parse(event.body);
+  } catch (e) {
+    return event.body;
+  }
 }
