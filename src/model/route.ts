@@ -7,6 +7,6 @@ export interface Route {
   method: MethodType | MethodStringLiteral;
   path: string;
   thisReference?: object;
-  handler: () => Promise<Response>;
+  handler: (request: Request) => Promise<Response>;
   argumentNames?: [];
 }

@@ -38,7 +38,7 @@ describe('unrest', () => {
       httpMethod: 'GET',
       path: '/ping',
     } as APIGatewayProxyEvent;
-    const response = await unrest.execute(event);
+    const response = await unrest.execute<undefined>(event);
 
     let responseString = JSON.stringify(response);
     expect(responseString).toEqual(
@@ -54,7 +54,7 @@ describe('unrest', () => {
       httpMethod: 'POST',
       path: '/hello',
     } as APIGatewayProxyEvent;
-    const response = await unrest.execute(event);
+    const response = await unrest.execute<undefined>(event);
 
     let responseString = JSON.stringify(response);
     expect(responseString).toEqual(

@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { Route } from '../model/route';
 import { Header } from '../model/header';
-import { Context } from 'vm';
+import { Context } from '../model/context';
 import { extractBody, extractOrigin, extractPath } from '../utils/utils';
 import { MethodType } from '../model/methodType';
 import { Response } from '../model/response';
@@ -46,10 +46,10 @@ export class Unrest {
     this.headers = this.headers.concat(props.headers);
   }
 
-  async execute(event: APIGatewayProxyEvent): Promise<UnrestResponse> {
-    const context: Context = {
+  async execute<T>(event: APIGatewayProxyEvent): Promise<UnrestResponse> {
+    const context: Context<T> = {
       event,
-      request: this.convertToRequest(event),
+      request: this.convertToRequest<T>(event),
       responseBuilder: Response.builder(),
     };
 
@@ -67,10 +67,10 @@ export class Unrest {
     });
   }
 
-  private convertToRequest(event: APIGatewayProxyEvent): Request {
+  private convertToRequest<T>(event: APIGatewayProxyEvent): Request<T> {
     const origin = extractOrigin(event);
     const path = extractPath(event);
-    const body = extractBody(event);
+    const body = extractBody(event) as T;
 
     return {
       origin,
@@ -81,7 +81,7 @@ export class Unrest {
     };
   }
 
-  private updateResponseHeader(context: Context) {
+  private updateResponseHeader<T>(context: Context<T>) {
     const { responseBuilder } = context;
     this.headers.forEach((header) => {
       const { key, value } = header;
@@ -89,7 +89,7 @@ export class Unrest {
     });
   }
 
-  private async callHandler(context: Context): Promise<void> {
+  private async callHandler<T>(context: Context<T>): Promise<void> {
     const { responseBuilder, request } = context;
     try {
       const handler = this.handlers.find((h) => h.canHandle(request));

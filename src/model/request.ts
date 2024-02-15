@@ -1,9 +1,9 @@
 import { MethodType } from './methodType';
 
-export interface Request {
+export interface Request<T> {
   origin?: string;
   method: MethodType;
   path: string;
   arguments: string[];
-  body: object | string | undefined;
+  body: T;
 }

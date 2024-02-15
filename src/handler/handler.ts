@@ -20,23 +20,23 @@ export abstract class Handler {
 
   abstract getMethod(): MethodType;
 
-  canHandleMethod(request: Request): boolean {
+  canHandleMethod<T>(request: Request<T>): boolean {
     return request.method === this.getMethod();
   }
 
-  canHandle(request: Request): boolean {
+  canHandle<T>(request: Request<T>): boolean {
     return this.canHandleMethod(request) && this.hasRoute(request);
   }
 
-  hasRoute(request: Request): boolean {
+  hasRoute<T>(request: Request<T>): boolean {
     return this.routingTrie.has(request.path);
   }
 
-  getRequestPath(request: Request): RequestPath | null | undefined {
+  getRequestPath<T>(request: Request<T>): RequestPath | null | undefined {
     return this.routingTrie.get(request.path);
   }
 
-  async handle(request: Request): Promise<Response> {
+  async handle<T>(request: Request<T>): Promise<Response> {
     const requestPath = this.getRequestPath(request);
     if (!requestPath) {
       throw new Error('Unable to determine route from path');
