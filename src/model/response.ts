@@ -48,7 +48,7 @@ export class ResponseBuilder {
   }
 
   withBody(
-    value: string | undefined | object | boolean | number,
+    value: string | undefined | object | boolean | number | unknown,
   ): ResponseBuilder {
     if (value == null) return this;
     else if (
