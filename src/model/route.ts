@@ -5,15 +5,19 @@ import { Request } from './request';
 export type MethodStringLiteral = 'get' | 'GET';
 
 export interface Route {
-  method: MethodType | MethodStringLiteral;
-  path: string;
-  thisReference?: object;
+  argumentNames?: [];
 
-  handler<T>(
-    request: Request<T | undefined | null | string>,
+  handler<T extends object>(
+    request: Request<
+      T | string | object | number | unknown | undefined | null
+    >,
     route: Route,
     params: string[],
   ): Promise<Response>;
 
-  argumentNames?: [];
+  method: MethodType | MethodStringLiteral;
+
+  path: string;
+
+  thisReference?: object;
 }
