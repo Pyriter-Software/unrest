@@ -45,7 +45,7 @@ export abstract class Handler {
     const { route, params } = requestPath;
 
     const response: Response = await route.handler.call(
-      route.handler,
+      route.thisReference,
       request,
       route,
       params,
