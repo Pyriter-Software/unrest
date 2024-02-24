@@ -2,13 +2,17 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 import { Route } from '../model/route';
 import { Header } from '../model/header';
 import { Context } from '../model/context';
-import { extractBody, extractOrigin, extractPath } from '../utils/utils';
-import { MethodType } from '../model/methodType';
+import {
+  extractBody,
+  extractMethod,
+  extractOrigin,
+  extractPath,
+} from '../utils/utils';
 import { Response } from '../model/response';
 import { Request } from '../model/request';
 import { UnrestResponse } from '../model/unrestResponse';
-import { GetHandler } from '../handler/typeHandler/getHandler';
 import { Handler } from '../handler';
+import { GetHandler } from '../handler/typeHandler/getHandler';
 import { PostHandler } from '../handler/typeHandler/postHandler';
 import { PutHandler } from '../handler/typeHandler/putHandler';
 
@@ -22,27 +26,23 @@ export class Unrest {
     return new UnrestBuilder();
   }
 
-  private readonly getHandler: GetHandler;
-  private readonly postHandler: PostHandler;
-  private readonly putHandler: PutHandler;
-
   private readonly handlers: Handler[];
   private readonly routingTable = new Map<string, Route[]>();
   private readonly headers: Header[] = [];
 
   constructor(props: UnrestProps) {
     this.buildRoutingTable(props.routes);
-    this.getHandler = new GetHandler({
+    const getHandler = new GetHandler({
       routingTable: this.routingTable,
     });
-    this.postHandler = new PostHandler({
+    const postHandler = new PostHandler({
       routingTable: this.routingTable,
     });
-    this.putHandler = new PutHandler({
+    const putHandler = new PutHandler({
       routingTable: this.routingTable,
     });
 
-    this.handlers = [this.getHandler, this.postHandler, this.putHandler];
+    this.handlers = [getHandler, postHandler, putHandler];
     this.headers = this.headers.concat(props.headers);
   }
 
@@ -71,10 +71,11 @@ export class Unrest {
     const origin = extractOrigin(event);
     const path = extractPath(event);
     const body = extractBody<T>(event);
+    const method = extractMethod(event);
 
     return {
       origin,
-      method: MethodType.GET,
+      method,
       path,
       arguments: [],
       body,

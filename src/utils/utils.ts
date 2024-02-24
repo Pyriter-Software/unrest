@@ -1,4 +1,5 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
+import { MethodType } from '../model';
 
 export function extractOrigin(
   event: APIGatewayProxyEvent,
@@ -10,6 +11,14 @@ export function extractOrigin(
 
 export function extractPath(event: APIGatewayProxyEvent): string {
   return event && event.path && event.path.length > 0 ? event.path : '/';
+}
+
+export function extractMethod(event: APIGatewayProxyEvent): MethodType {
+  if (event && event.httpMethod && event.httpMethod.length > 0) {
+    return event.httpMethod.toUpperCase();
+  } else {
+    throw new TypeError(`httpMethod not defined`);
+  }
 }
 
 export function extractRouteInfo(path: string): string[] {

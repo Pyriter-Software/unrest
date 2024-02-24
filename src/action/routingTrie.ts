@@ -11,7 +11,7 @@ class Node {
   ) {}
 }
 
-const ROOT_NODE = new Node('/', [], undefined);
+const generateRootNode = () => new Node('/', [], undefined);
 
 export class RoutingTrie {
   public root?: Node;
@@ -27,7 +27,7 @@ export class RoutingTrie {
       throw new Error('Path must start with /');
     }
 
-    if (!this.root) this.root = ROOT_NODE;
+    if (!this.root) this.root = generateRootNode();
     if (path.length === 1) {
       this.root.route = route;
       return;
