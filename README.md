@@ -4,7 +4,7 @@
 ## Description 
 Request routing for AWS Lambda running Nodejs, written in Typescript
 
-Motivation: Existing routing libraries use regex to resolve routing which can be slow. This library uses a trie data structure with local caching to improve lookup and response time. (More latency data to come)
+Motivation: Existing routing libraries are inefficient. This library uses a trie data structure with local caching to improve lookup and response time. (More latency data to come)
 
 ## Install
 
