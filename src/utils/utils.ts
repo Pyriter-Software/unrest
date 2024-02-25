@@ -15,7 +15,7 @@ export function extractPath(event: APIGatewayProxyEvent): string {
 
 export function extractMethod(event: APIGatewayProxyEvent): MethodType {
   if (event && event.httpMethod && event.httpMethod.length > 0) {
-    return event.httpMethod.toUpperCase();
+    return event.httpMethod.toUpperCase() as MethodType;
   } else {
     throw new TypeError(`httpMethod not defined`);
   }
@@ -28,10 +28,12 @@ export function extractRouteInfo(path: string): string[] {
     .map(decodeURI);
 }
 
-export function extractBody<T>(event: APIGatewayProxyEvent): T {
+export function extractBody<T>(
+  event: APIGatewayProxyEvent,
+): T | string | null {
   try {
-    return JSON.parse(event.body);
+    return event && event.body ? JSON.parse(event.body) : null;
   } catch (e) {
-    return event.body;
+    return event && event.body ? event.body : null;
   }
 }

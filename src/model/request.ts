@@ -5,5 +5,5 @@ export interface Request<T> {
   method: MethodType;
   path: string;
   arguments: string[];
-  body: T;
+  body: T | string | null;
 }
