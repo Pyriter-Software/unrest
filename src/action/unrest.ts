@@ -12,9 +12,7 @@ import { Response } from '../model/response';
 import { Request } from '../model/request';
 import { UnrestResponse } from '../model/unrestResponse';
 import { Handler } from '../handler';
-import { GetHandler } from '../handler/typeHandler/getHandler';
-import { PostHandler } from '../handler/typeHandler/postHandler';
-import { PutHandler } from '../handler/typeHandler/putHandler';
+import { MethodType } from '../model';
 
 export interface UnrestProps {
   routes: Route[];
@@ -32,17 +30,12 @@ export class Unrest {
 
   constructor(props: UnrestProps) {
     this.buildRoutingTable(props.routes);
-    const getHandler = new GetHandler({
-      routingTable: this.routingTable,
+    this.handlers = Object.values(MethodType).map((method) => {
+      return new Handler({
+        method,
+        routingTable: this.routingTable,
+      });
     });
-    const postHandler = new PostHandler({
-      routingTable: this.routingTable,
-    });
-    const putHandler = new PutHandler({
-      routingTable: this.routingTable,
-    });
-
-    this.handlers = [getHandler, postHandler, putHandler];
     this.headers = this.headers.concat(props.headers);
   }
 

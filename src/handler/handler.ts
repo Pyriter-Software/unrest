@@ -7,21 +7,23 @@ import { Response } from '../model/response';
 
 export interface Props {
   routingTable: Map<string, Route[]>;
+  method: MethodType;
 }
 
-export abstract class Handler {
+export class Handler {
   protected routingTrie: RoutingTrie;
+  private readonly method: MethodType;
 
   public constructor(protected props: Props) {
+    const { method } = props;
+    this.method = method;
     this.routingTrie = new RoutingTrie(
-      props.routingTable.get(this.getMethod()),
+      props.routingTable.get(this.method),
     );
   }
 
-  abstract getMethod(): MethodType;
-
   canHandleMethod<T>(request: Request<T>): boolean {
-    return request.method === this.getMethod();
+    return request.method === this.method;
   }
 
   canHandle<T>(request: Request<T>): boolean {
