@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 import { Unrest } from './unrest';
 import { Response } from '../model/response';
 import { MethodType } from '../model/methodType';
-import { Request } from '../model/request';
+import { RequestProps } from '../model';
 
 describe('unrest', () => {
   const unrest = Unrest.builder()
@@ -18,8 +18,8 @@ describe('unrest', () => {
       path: '/ping',
     })
     .withRoute({
-      handler: (request: Request<string>) => {
-        const { body } = request;
+      handler: (props: RequestProps<string>) => {
+        const { body } = props.request;
         const response: Response = Response.builder()
           .withStatusCode(200)
           .withBody(body)
@@ -30,8 +30,8 @@ describe('unrest', () => {
       path: '/hello',
     })
     .withRoute({
-      handler: (request: Request<string>) => {
-        const { body } = request;
+      handler: (props: RequestProps<string>) => {
+        const { body } = props.request;
         const response: Response = Response.builder()
           .withStatusCode(200)
           .withBody(body)
@@ -39,6 +39,18 @@ describe('unrest', () => {
         return Promise.resolve(response);
       },
       method: MethodType.PUT,
+      path: '/hello/{id}',
+    })
+    .withRoute({
+      handler: (props: RequestProps<null>) => {
+        const value = props.params[0];
+        const response: Response = Response.builder()
+          .withStatusCode(200)
+          .withBody(value)
+          .build();
+        return Promise.resolve(response);
+      },
+      method: MethodType.GET,
       path: '/hello/{id}',
     })
     .withHeader({
@@ -107,5 +119,21 @@ describe('unrest', () => {
 
     expect(response).toBeDefined();
     expect(response.statusCode).toEqual(404);
+  });
+
+  test('get with query params', async () => {
+    const event = {
+      httpMethod: 'GET',
+      path: '/hello/123',
+      body: 'success',
+    } as APIGatewayProxyEvent;
+    const response = await unrest.execute<string>(event);
+
+    let responseString = JSON.stringify(response);
+    expect(responseString).toEqual(
+      `{"statusCode":200,"body":"123","headers":{"Access-Control-Allow-Origin":"http://localhost"}}`,
+    );
+    expect(response).toBeDefined();
+    expect(response.statusCode).toEqual(200);
   });
 });

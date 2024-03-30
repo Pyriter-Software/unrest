@@ -48,9 +48,11 @@ export class Handler {
 
     const response: Response = await route.handler.call(
       route.thisReference,
-      request,
-      route,
-      params,
+      {
+        request,
+        route,
+        params,
+      },
     );
 
     const statusCode = response.statusCode;
