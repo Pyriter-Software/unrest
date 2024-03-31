@@ -18,7 +18,7 @@ export class Response<T> {
     return this.props.statusCode;
   }
 
-  get body(): T | undefined | string {
+  get body(): T | any {
     return this.props.body;
   }
 
@@ -33,13 +33,28 @@ export class Response<T> {
   toJSON(): UnrestResponse {
     return {
       ...this.props,
+      body: this.convertBodyToString(this.body),
     };
+  }
+
+  private convertBodyToString(value: any): string | undefined | null {
+    if (value == null) return null;
+    else if (
+      typeof value === 'string' ||
+      (value as any) instanceof String
+    ) {
+      return value;
+    } else if (typeof value === 'object') {
+      return JSON.stringify(value);
+    } else {
+      return String(value);
+    }
   }
 }
 
 export class ResponseBuilder<T> {
   private statusCode?: StatusType;
-  private body: T | undefined | string;
+  private body: T | any;
   private headers: ResponseHeaders = {};
 
   withStatusCode(value: number): ResponseBuilder<T> {
@@ -47,20 +62,8 @@ export class ResponseBuilder<T> {
     return this;
   }
 
-  withBody(
-    value: string | undefined | object | boolean | number | unknown,
-  ): ResponseBuilder<T> {
-    if (value == null) return this;
-    else if (
-      typeof value === 'string' ||
-      (value as any) instanceof String
-    ) {
-      this.body = value as string;
-    } else if (typeof value === 'object') {
-      this.body = JSON.stringify(value);
-    } else {
-      this.body = String(value);
-    }
+  withBody(value: T | any): ResponseBuilder<T> {
+    this.body = value;
     return this;
   }
 

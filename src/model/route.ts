@@ -5,9 +5,7 @@ import { Request } from './request';
 export type MethodStringLiteral = 'get' | 'GET';
 
 export type RequestProps<T> = {
-  request: Request<
-    T | string | object | number | unknown | undefined | null
-  >;
+  request: Request<T | any>;
   route: Route;
   params: string[];
 };

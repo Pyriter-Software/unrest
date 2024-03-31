@@ -3,6 +3,6 @@ import { ResponseHeaders } from './response';
 
 export interface UnrestResponse {
   statusCode: StatusType;
-  body?: string | undefined | any;
+  body?: string | undefined | null;
   headers: ResponseHeaders;
 }
