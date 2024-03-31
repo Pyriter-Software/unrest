@@ -15,7 +15,9 @@ export type RequestProps<T> = {
 export interface Route {
   argumentNames?: [];
 
-  handler<T extends object>(props: RequestProps<T>): Promise<Response>;
+  handler<T, K>(
+    props: RequestProps<T>,
+  ): Promise<Response<K | undefined | string>>;
 
   method: MethodType | MethodStringLiteral;
 

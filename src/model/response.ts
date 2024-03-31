@@ -1,9 +1,9 @@
 import { StatusType } from '../model/statusType';
 import { UnrestResponse } from './unrestResponse';
 
-export interface ResponseProps {
+export interface ResponseProps<T> {
   statusCode: StatusType;
-  body?: string | undefined;
+  body?: undefined | T | string;
   headers: ResponseHeaders;
 }
 
@@ -11,14 +11,14 @@ export interface ResponseHeaders {
   [key: string]: string;
 }
 
-export class Response {
-  constructor(private props: ResponseProps) {}
+export class Response<T> {
+  constructor(private props: ResponseProps<T>) {}
 
   get statusCode() {
     return this.props.statusCode;
   }
 
-  get body() {
+  get body(): T | undefined | string {
     return this.props.body;
   }
 
@@ -26,8 +26,8 @@ export class Response {
     return this.props.headers;
   }
 
-  static builder(): ResponseBuilder {
-    return new ResponseBuilder();
+  static builder<T>(): ResponseBuilder<T> {
+    return new ResponseBuilder<T>();
   }
 
   toJSON(): UnrestResponse {
@@ -37,19 +37,19 @@ export class Response {
   }
 }
 
-export class ResponseBuilder {
+export class ResponseBuilder<T> {
   private statusCode?: StatusType;
-  private body?: string;
+  private body: T | undefined | string;
   private headers: ResponseHeaders = {};
 
-  withStatusCode(value: number): ResponseBuilder {
+  withStatusCode(value: number): ResponseBuilder<T> {
     this.statusCode = value;
     return this;
   }
 
   withBody(
     value: string | undefined | object | boolean | number | unknown,
-  ): ResponseBuilder {
+  ): ResponseBuilder<T> {
     if (value == null) return this;
     else if (
       typeof value === 'string' ||
@@ -64,7 +64,7 @@ export class ResponseBuilder {
     return this;
   }
 
-  withHeader(key: string, value: string): ResponseBuilder {
+  withHeader(key: string, value: string): ResponseBuilder<T> {
     if (key !== undefined) {
       if (value !== undefined) {
         this.headers[key] = value;
@@ -75,11 +75,11 @@ export class ResponseBuilder {
     return this;
   }
 
-  build(): Response {
+  build(): Response<T> {
     if (this.statusCode == null) {
       throw new Error('statusCode must be defined');
     }
-    return new Response({
+    return new Response<T>({
       statusCode: this.statusCode,
       body: this.body,
       headers: this.headers,

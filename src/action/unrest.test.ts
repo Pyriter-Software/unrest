@@ -8,7 +8,7 @@ describe('unrest', () => {
   const unrest = Unrest.builder()
     .withRoute({
       handler: () => {
-        const response: Response = Response.builder()
+        const response = Response.builder<string>()
           .withStatusCode(200)
           .withBody('success')
           .build();
@@ -20,7 +20,7 @@ describe('unrest', () => {
     .withRoute({
       handler: (props: RequestProps<string>) => {
         const { body } = props.request;
-        const response: Response = Response.builder()
+        const response = Response.builder<string>()
           .withStatusCode(200)
           .withBody(body)
           .build();
@@ -32,7 +32,7 @@ describe('unrest', () => {
     .withRoute({
       handler: (props: RequestProps<string>) => {
         const { body } = props.request;
-        const response: Response = Response.builder()
+        const response: Response<string> = Response.builder<string>()
           .withStatusCode(200)
           .withBody(body)
           .build();
@@ -44,7 +44,7 @@ describe('unrest', () => {
     .withRoute({
       handler: (props: RequestProps<null>) => {
         const value = props.params[0];
-        const response: Response = Response.builder()
+        const response: Response<string> = Response.builder<string>()
           .withStatusCode(200)
           .withBody(value)
           .build();

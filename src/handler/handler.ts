@@ -38,7 +38,7 @@ export class Handler {
     return this.routingTrie.get(request.path);
   }
 
-  async handle<T>(request: Request<T>): Promise<Response> {
+  async handle<T, K>(request: Request<T>): Promise<Response<K>> {
     const requestPath = this.getRequestPath(request);
     if (!requestPath) {
       throw new Error('Unable to determine route from path');
@@ -46,19 +46,16 @@ export class Handler {
 
     const { route, params } = requestPath;
 
-    const response: Response = await route.handler.call(
-      route.thisReference,
-      {
-        request,
-        route,
-        params,
-      },
-    );
+    const response = await route.handler.call(route.thisReference, {
+      request,
+      route,
+      params,
+    });
 
     const statusCode = response.statusCode;
     const body = response.body;
 
-    return Response.builder()
+    return Response.builder<K>()
       .withStatusCode(statusCode)
       .withBody(body)
       .build();

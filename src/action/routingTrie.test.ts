@@ -5,29 +5,29 @@ describe('routingTrie', () => {
   const routingTrie = new RoutingTrie();
   beforeAll(() => {
     routingTrie.insert({
-      handler: () => {
-        return Promise.resolve({} as Response);
+      handler: (): Promise<Response<undefined>> => {
+        return Promise.resolve({} as Response<undefined>);
       },
       path: '/foo',
       method: 'GET',
     });
     routingTrie.insert({
       handler: () => {
-        return Promise.resolve({} as Response);
+        return Promise.resolve({} as Response<undefined>);
       },
       path: '/foo/{bar}',
       method: 'GET',
     });
     routingTrie.insert({
       handler: () => {
-        return Promise.resolve({} as Response);
+        return Promise.resolve({} as Response<undefined>);
       },
       path: '/foo/{bar}/hello',
       method: 'GET',
     });
     routingTrie.insert({
       handler: () => {
-        return Promise.resolve({} as Response);
+        return Promise.resolve({} as Response<undefined>);
       },
       path: '/foo/{bar}/hello/{world}',
       method: 'GET',

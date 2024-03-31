@@ -5,5 +5,5 @@ import { ResponseBuilder } from './response';
 export interface Context<T> {
   event: APIGatewayProxyEvent;
   request: Request<T>;
-  responseBuilder: ResponseBuilder;
+  responseBuilder: ResponseBuilder<any>;
 }
