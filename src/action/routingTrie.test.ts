@@ -44,12 +44,12 @@ describe('routingTrie', () => {
       expect(requestPath.route.method).toEqual('GET');
     });
 
-    test('get route with one argument', () => {
+    test('get route with one url param', () => {
       const requestPath = routingTrie.get('/foo/123')!!;
 
       expect(requestPath.path).toEqual('/foo/123');
       expect(requestPath.params.length).toEqual(1);
-      expect(requestPath.params[0]).toEqual('123');
+      expect(requestPath.params[0]).toEqual(['bar', '123']);
       expect(requestPath.route.path).toEqual('/foo/{bar}');
       expect(requestPath.route.handler).toBeDefined();
       expect(requestPath.route.method).toEqual('GET');
@@ -60,7 +60,7 @@ describe('routingTrie', () => {
 
       expect(requestPath.path).toEqual('/foo/{bar}');
       expect(requestPath.params.length).toEqual(1);
-      expect(requestPath.params[0]).toEqual('{bar}');
+      expect(requestPath.params[0]).toEqual(['bar', '{bar}']);
       expect(requestPath.route.path).toEqual('/foo/{bar}');
       expect(requestPath.route.handler).toBeDefined();
       expect(requestPath.route.method).toEqual('GET');

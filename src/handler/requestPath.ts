@@ -4,7 +4,8 @@ export class RequestPath {
   constructor(
     public path: string,
     public route: Route,
-    public params: string[],
+    public params: string[][],
+    public queryStringParams: string[][],
   ) {}
 
   static builder() {
@@ -15,7 +16,8 @@ export class RequestPath {
 class RequestPathBuilder {
   private path?: string;
   private route?: Route;
-  private params: string[] = [];
+  private params: string[][] = [];
+  private queryStringParams: string[][] = [];
 
   withPath(path: string) {
     this.path = path;
@@ -27,8 +29,18 @@ class RequestPathBuilder {
     return this;
   }
 
-  withParam(param: string) {
-    this.params.push(param);
+  withParam(key: string, value: string) {
+    this.params.push([key, value]);
+    return this;
+  }
+
+  withQueryString(queryString: string) {
+    if (!queryString) return this;
+    const tokens = queryString.split('&');
+    for (const token of tokens) {
+      const [key, value] = token.split('=');
+      this.queryStringParams.push([key, value]);
+    }
     return this;
   }
 
@@ -39,6 +51,11 @@ class RequestPathBuilder {
     if (this.route == null) {
       throw new Error('Route is required');
     }
-    return new RequestPath(this.path, this.route, this.params);
+    return new RequestPath(
+      this.path,
+      this.route,
+      this.params,
+      this.queryStringParams,
+    );
   }
 }

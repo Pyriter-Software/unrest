@@ -44,12 +44,13 @@ export class Handler {
       throw new Error('Unable to determine route from path');
     }
 
-    const { route, params } = requestPath;
+    const { route, params, queryStringParams } = requestPath;
 
     const response = await route.handler.call(route.thisReference, {
       request,
       route,
       params,
+      queryStringParams,
     });
 
     const statusCode = response.statusCode;

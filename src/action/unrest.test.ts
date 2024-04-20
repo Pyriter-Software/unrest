@@ -43,10 +43,12 @@ describe('unrest', () => {
     })
     .withRoute({
       handler: (props: RequestProps<null>) => {
-        const value = props.params[0];
         const response: Response<string> = Response.builder<string>()
           .withStatusCode(200)
-          .withBody(value)
+          .withBody({
+            params: props.params,
+            queryStringParams: props.queryStringParams,
+          })
           .build();
         return Promise.resolve(response);
       },
@@ -100,10 +102,6 @@ describe('unrest', () => {
     } as APIGatewayProxyEvent;
     const response = await unrest.execute<string>(event);
 
-    let responseString = JSON.stringify(response);
-    expect(responseString).toEqual(
-      `{"statusCode":200,"body":"success","headers":{"Access-Control-Allow-Origin":"http://localhost"}}`,
-    );
     expect(response).toBeDefined();
     expect(response.statusCode).toEqual(200);
     expect(response.body).toEqual('success');
@@ -121,7 +119,7 @@ describe('unrest', () => {
     expect(response.statusCode).toEqual(404);
   });
 
-  test('get with query params', async () => {
+  test('get with url params', async () => {
     const event = {
       httpMethod: 'GET',
       path: '/hello/123',
@@ -129,11 +127,27 @@ describe('unrest', () => {
     } as APIGatewayProxyEvent;
     const response = await unrest.execute<string>(event);
 
-    let responseString = JSON.stringify(response);
-    expect(responseString).toEqual(
-      `{"statusCode":200,"body":"123","headers":{"Access-Control-Allow-Origin":"http://localhost"}}`,
-    );
+    expect(response).toEqual({
+      statusCode: 200,
+      body: `{"params":[["id","123"]],"queryStringParams":[]}`,
+      headers: { 'Access-Control-Allow-Origin': 'http://localhost' },
+    });
     expect(response).toBeDefined();
+    expect(response.statusCode).toEqual(200);
+  });
+
+  test('get with querystring params', async () => {
+    const event = {
+      httpMethod: 'GET',
+      path: '/hello/myId?value1=123&value2=345',
+      body: 'success',
+    } as APIGatewayProxyEvent;
+    const response = await unrest.execute<string>(event);
+
+    expect(response).toBeDefined();
+    expect(response.body).toEqual(
+      `{"params":[["id","myId"]],"queryStringParams":[["value1","123"],["value2","345"]]}`,
+    );
     expect(response.statusCode).toEqual(200);
   });
 });

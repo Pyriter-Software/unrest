@@ -88,30 +88,35 @@ export class RoutingTrie {
   }
 
   get(path: string): RequestPath | undefined | null {
+    const [pathWithoutQueryString, queryString] = path.split('?');
     let i = 0;
     if (this.root == null) return null;
     let currentNode = this.root;
-    const requestPathBuilder = RequestPath.builder().withPath(path);
+    const requestPathBuilder = RequestPath.builder()
+      .withPath(pathWithoutQueryString)
+      .withQueryString(queryString);
+
     while (i < path.length) {
       const char = path[i];
-      const { value, children } = currentNode;
+      const { value, children, wildCardKey } = currentNode;
 
       if (value === '*') {
         // If value is * then we want to gobble update all the text in the request path a
         const paramBuilder: string[] = [];
         while (i < path.length) {
-          if (path[i] === '/') break;
+          if (path[i] === '/' || path[i] === '?') break;
           paramBuilder.push(path[i]);
           i++;
         }
         const param = paramBuilder.join('');
-        requestPathBuilder.withParam(param);
+        if (!wildCardKey) throw TypeError('Url param key not defined');
+        requestPathBuilder.withParam(wildCardKey, param);
       } else if (value !== char) {
         return null; // Invalid path
       }
 
       const nextIndex = i + 1;
-      if (nextIndex >= path.length) break;
+      if (nextIndex >= path.length || path[i] === '?') break;
 
       // Next character operation
       const nextChar = path[nextIndex];

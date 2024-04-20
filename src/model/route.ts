@@ -7,7 +7,8 @@ export type MethodStringLiteral = 'get' | 'GET';
 export type RequestProps<T> = {
   request: Request<T | any>;
   route: Route;
-  params: string[];
+  params: string[][];
+  queryStringParams: string[][];
 };
 
 export interface Route {
