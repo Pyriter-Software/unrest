@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { MethodType } from '../model';
+import { MethodType, QueryStringParams } from '../model';
 
 export function extractOrigin(
   event: APIGatewayProxyEvent,
@@ -36,4 +36,14 @@ export function extractBody<T>(
   } catch (e) {
     return event && event.body ? event.body : null;
   }
+}
+
+export function convertToObjectQueryStringParams(
+  listQueryStringParams: string[][],
+): QueryStringParams {
+  const queryStringParams: QueryStringParams = {};
+  listQueryStringParams.forEach(([key, value]) => {
+    queryStringParams[key] = value;
+  });
+  return queryStringParams;
 }

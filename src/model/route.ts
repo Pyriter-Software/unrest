@@ -8,7 +8,11 @@ export type RequestProps<T> = {
   request: Request<T | any>;
   route: Route;
   params: string[][];
-  queryStringParams: string[][];
+  queryStringParams: QueryStringParams;
+};
+
+export type QueryStringParams = {
+  [key: string]: string;
 };
 
 export interface Route {

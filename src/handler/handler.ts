@@ -4,6 +4,7 @@ import { RoutingTrie } from '../action/routingTrie';
 import { MethodType } from '../model/methodType';
 import { Request } from '../model/request';
 import { Response } from '../model/response';
+import { convertToObjectQueryStringParams } from '../utils';
 
 export interface Props {
   routingTable: Map<string, Route[]>;
@@ -45,12 +46,14 @@ export class Handler {
     }
 
     const { route, params, queryStringParams } = requestPath;
+    const convertedQueryStringParams =
+      convertToObjectQueryStringParams(queryStringParams);
 
     const response = await route.handler.call(route.thisReference, {
       request,
       route,
       params,
-      queryStringParams,
+      queryStringParams: convertedQueryStringParams,
     });
 
     const statusCode = response.statusCode;

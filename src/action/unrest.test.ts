@@ -127,12 +127,16 @@ describe('unrest', () => {
     } as APIGatewayProxyEvent;
     const response = await unrest.execute<string>(event);
 
-    expect(response).toEqual({
-      statusCode: 200,
-      body: `{"params":[["id","123"]],"queryStringParams":[]}`,
-      headers: { 'Access-Control-Allow-Origin': 'http://localhost' },
+    const expectedBody = JSON.stringify({
+      params: [['id', '123']],
+      queryStringParams: {},
     });
+
     expect(response).toBeDefined();
+    expect(response.body).toEqual(expectedBody);
+    expect(response.headers).toEqual({
+      'Access-Control-Allow-Origin': 'http://localhost',
+    });
     expect(response.statusCode).toEqual(200);
   });
 
@@ -144,10 +148,16 @@ describe('unrest', () => {
     } as APIGatewayProxyEvent;
     const response = await unrest.execute<string>(event);
 
+    const expectedBody = JSON.stringify({
+      params: [['id', 'myId']],
+      queryStringParams: {
+        value1: '123',
+        value2: '345',
+      },
+    });
+
     expect(response).toBeDefined();
-    expect(response.body).toEqual(
-      `{"params":[["id","myId"]],"queryStringParams":[["value1","123"],["value2","345"]]}`,
-    );
+    expect(response.body).toEqual(expectedBody);
     expect(response.statusCode).toEqual(200);
   });
 });
