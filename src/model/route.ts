@@ -18,9 +18,7 @@ export type QueryStringParams = {
 export interface Route {
   argumentNames?: [];
 
-  handler<T, K>(
-    props: RequestProps<T>,
-  ): Promise<Response<K | undefined | string>>;
+  handler<T, K>(props: RequestProps<T>): Promise<Response<K>>;
 
   method: MethodType | MethodStringLiteral;
 

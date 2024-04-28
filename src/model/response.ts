@@ -11,14 +11,14 @@ export interface ResponseHeaders {
   [key: string]: string;
 }
 
-export class Response<T> {
-  constructor(private props: ResponseProps<T>) {}
+export class Response<K> {
+  constructor(private props: ResponseProps<K>) {}
 
   get statusCode() {
     return this.props.statusCode;
   }
 
-  get body(): T | undefined {
+  get body(): K | undefined {
     return this.props.body;
   }
 
@@ -26,8 +26,8 @@ export class Response<T> {
     return this.props.headers;
   }
 
-  static builder<T>(): ResponseBuilder<T> {
-    return new ResponseBuilder<T>();
+  static builder<K>(): ResponseBuilder<K> {
+    return new ResponseBuilder<K>();
   }
 
   toJSON(): UnrestResponse {
@@ -52,22 +52,22 @@ export class Response<T> {
   }
 }
 
-export class ResponseBuilder<T> {
+export class ResponseBuilder<K> {
   private statusCode?: StatusType;
-  private body: T | any;
+  private body: K | any;
   private headers: ResponseHeaders = {};
 
-  withStatusCode(value: number): ResponseBuilder<T> {
+  withStatusCode(value: number): ResponseBuilder<K> {
     this.statusCode = value;
     return this;
   }
 
-  withBody(value: T | any): ResponseBuilder<T> {
+  withBody(value: K): ResponseBuilder<K> {
     this.body = value;
     return this;
   }
 
-  withHeader(key: string, value: string): ResponseBuilder<T> {
+  withHeader(key: string, value: string): ResponseBuilder<K> {
     if (key !== undefined) {
       if (value !== undefined) {
         this.headers[key] = value;
@@ -78,11 +78,11 @@ export class ResponseBuilder<T> {
     return this;
   }
 
-  build(): Response<T> {
+  build(): Response<K> {
     if (this.statusCode == null) {
       throw new Error('statusCode must be defined');
     }
-    return new Response<T>({
+    return new Response<K>({
       statusCode: this.statusCode,
       body: this.body,
       headers: this.headers,

@@ -57,11 +57,11 @@ export class Handler {
     });
 
     const statusCode = response.statusCode;
-    const body = response.body;
+    const body = response.body as K;
 
     return Response.builder<K>()
       .withStatusCode(statusCode)
       .withBody(body)
-      .build();
+      .build() as any;
   }
 }

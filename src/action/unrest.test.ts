@@ -42,8 +42,10 @@ describe('unrest', () => {
       path: '/hello/{id}',
     })
     .withRoute({
-      handler: (props: RequestProps<null>) => {
-        const response: Response<string> = Response.builder<string>()
+      handler: (
+        props: RequestProps<null>,
+      ): Promise<Response<TestBody>> => {
+        const response = Response.builder<TestBody>()
           .withStatusCode(200)
           .withBody({
             params: props.params,
@@ -161,3 +163,8 @@ describe('unrest', () => {
     expect(response.statusCode).toEqual(200);
   });
 });
+
+type TestBody = {
+  params: any;
+  queryStringParams: any;
+};

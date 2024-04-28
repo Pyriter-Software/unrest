@@ -1,10 +1,11 @@
 # Unrest
 
+## Description
 
-## Description 
 Request routing for AWS Lambda running Nodejs, written in Typescript
 
-Motivation: Existing routing libraries are inefficient. This library uses a trie data structure with local caching to improve lookup and response time. (More latency data to come)
+Motivation: Existing routing libraries are inefficient. This library uses a trie data structure with local caching to
+improve lookup and response time. (More latency data to come)
 
 ## Install
 
@@ -17,6 +18,21 @@ npm install @pyriter/unrest
 1. Define routes
 2. Define controllers
 3. Type the request body
+
+## One Time Setup
+
+Set the `"noStrictGenericChecks"` to true in your tsconfig to avoid typescript errors
+
+```json
+{
+  "compilerOptions": {
+    ...
+    "noStrictGenericChecks": true
+    ...
+  }
+}
+
+```
 
 ## Usage
 
@@ -70,7 +86,7 @@ const unrest = Unrest.builder()
     method: MethodType.POST,
     path: '/api/v1/account',
     handler: accountController.postAccount,
-    thisReference: accountController 
+    thisReference: accountController
   })
   .withRoute({
     method: MethodType.PUT,
@@ -88,7 +104,7 @@ const unrest = Unrest.builder()
     method: MethodType.GET,
     path: '/api/v1/user/{userId}/order/{orderId}',
     handler: orderController.getOrderFromUser,
-    thisReference: orderController 
+    thisReference: orderController
   })
   .build();
 ```
