@@ -3,7 +3,7 @@ import { UnrestResponse } from './unrestResponse';
 
 export interface ResponseProps<T> {
   statusCode: StatusType;
-  body?: undefined | T | string;
+  body?: undefined | T;
   headers: ResponseHeaders;
 }
 
@@ -18,7 +18,7 @@ export class Response<T> {
     return this.props.statusCode;
   }
 
-  get body(): T | any {
+  get body(): T | undefined {
     return this.props.body;
   }
 
