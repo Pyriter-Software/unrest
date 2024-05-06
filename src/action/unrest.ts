@@ -7,6 +7,7 @@ import {
   extractMethod,
   extractOrigin,
   extractPath,
+  extractQueryStringParams,
 } from '../utils/utils';
 import { Response } from '../model/response';
 import { Request } from '../model/request';
@@ -65,6 +66,7 @@ export class Unrest {
     const path = extractPath(event);
     const body = extractBody<T>(event);
     const method = extractMethod(event);
+    const queryStringParams = extractQueryStringParams(event);
 
     return {
       origin,
@@ -72,6 +74,7 @@ export class Unrest {
       path,
       arguments: [],
       body,
+      queryStringParams,
     };
   }
 

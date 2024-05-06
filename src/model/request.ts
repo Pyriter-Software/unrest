@@ -6,4 +6,5 @@ export interface Request<T> {
   path: string;
   arguments: string[];
   body: T | string | null;
+  queryStringParams;
 }

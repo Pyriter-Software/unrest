@@ -53,7 +53,10 @@ export class Handler {
       request,
       route,
       params,
-      queryStringParams: convertedQueryStringParams,
+      queryStringParams: {
+        ...request.queryStringParams,
+        ...convertedQueryStringParams,
+      },
     });
 
     const statusCode = response.statusCode;

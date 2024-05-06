@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { MethodType, QueryStringParams } from '../model';
+import { APIGatewayProxyEventQueryStringParameters } from 'aws-lambda/trigger/api-gateway-proxy';
 
 export function extractOrigin(
   event: APIGatewayProxyEvent,
@@ -19,6 +20,14 @@ export function extractMethod(event: APIGatewayProxyEvent): MethodType {
   } else {
     throw new TypeError(`httpMethod not defined`);
   }
+}
+
+export function extractQueryStringParams(
+  event: APIGatewayProxyEvent,
+): APIGatewayProxyEventQueryStringParameters {
+  return event && event.queryStringParameters
+    ? event.queryStringParameters
+    : {};
 }
 
 export function extractRouteInfo(path: string): string[] {
