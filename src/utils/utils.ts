@@ -1,6 +1,5 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { MethodType, QueryStringParams } from '../model';
-import { APIGatewayProxyEventQueryStringParameters } from 'aws-lambda/trigger/api-gateway-proxy';
 
 export function extractOrigin(
   event: APIGatewayProxyEvent,
@@ -24,7 +23,7 @@ export function extractMethod(event: APIGatewayProxyEvent): MethodType {
 
 export function extractQueryStringParams(
   event: APIGatewayProxyEvent,
-): APIGatewayProxyEventQueryStringParameters {
+): QueryStringParams {
   return event && event.queryStringParameters
     ? event.queryStringParameters
     : {};

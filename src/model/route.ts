@@ -12,7 +12,7 @@ export type RequestProps<T> = {
 };
 
 export type QueryStringParams = {
-  [key: string]: string;
+  [key: string]: string | undefined;
 };
 
 export type UrlParams = {

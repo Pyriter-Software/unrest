@@ -72,9 +72,9 @@ export class Unrest {
       origin,
       method,
       path,
-      arguments: [],
       body,
       queryStringParams,
+      urlParams: {},
     };
   }
 
