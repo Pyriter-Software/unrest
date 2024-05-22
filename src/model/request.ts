@@ -6,6 +6,6 @@ export interface Request<T> {
   method: MethodType;
   path: string;
   urlParams: UrlParams;
-  body: T | string | null | undefined;
+  body?: T | string | null | undefined;
   queryStringParams: QueryStringParams;
 }
