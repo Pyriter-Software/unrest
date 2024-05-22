@@ -48,7 +48,7 @@ describe('unrest', () => {
         const response = Response.builder<TestBody>()
           .withStatusCode(200)
           .withBody({
-            params: props.params,
+            params: props.urlParams,
             queryStringParams: props.queryStringParams,
           })
           .build();
@@ -130,7 +130,7 @@ describe('unrest', () => {
     const response = await unrest.execute<string>(event);
 
     const expectedBody = JSON.stringify({
-      params: [['id', '123']],
+      params: { id: '123' },
       queryStringParams: {},
     });
 
@@ -151,7 +151,7 @@ describe('unrest', () => {
     const response = await unrest.execute<string>(event);
 
     const expectedBody = JSON.stringify({
-      params: [['id', 'myId']],
+      params: { id: 'myId' },
       queryStringParams: {
         value1: '123',
         value2: '345',

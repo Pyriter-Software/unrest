@@ -38,7 +38,7 @@ describe('routingTrie', () => {
       const requestPath = routingTrie.get('/foo')!!;
 
       expect(requestPath.path).toEqual('/foo');
-      expect(requestPath.params.length).toEqual(0);
+      expect(Object.keys(requestPath.urlParams).length).toEqual(0);
       expect(requestPath.route).toBeDefined();
       expect(requestPath.route.handler).toBeDefined();
       expect(requestPath.route.method).toEqual('GET');
@@ -48,8 +48,8 @@ describe('routingTrie', () => {
       const requestPath = routingTrie.get('/foo/123')!!;
 
       expect(requestPath.path).toEqual('/foo/123');
-      expect(requestPath.params.length).toEqual(1);
-      expect(requestPath.params[0]).toEqual(['bar', '123']);
+      expect(Object.keys(requestPath.urlParams).length).toEqual(1);
+      expect(requestPath.urlParams['bar']).toEqual('123');
       expect(requestPath.route.path).toEqual('/foo/{bar}');
       expect(requestPath.route.handler).toBeDefined();
       expect(requestPath.route.method).toEqual('GET');
@@ -59,8 +59,8 @@ describe('routingTrie', () => {
       const requestPath = routingTrie.get('/foo/{bar}')!!;
 
       expect(requestPath.path).toEqual('/foo/{bar}');
-      expect(requestPath.params.length).toEqual(1);
-      expect(requestPath.params[0]).toEqual(['bar', '{bar}']);
+      expect(Object.keys(requestPath.urlParams).length).toEqual(1);
+      expect(requestPath.urlParams['bar']).toEqual('{bar}');
       expect(requestPath.route.path).toEqual('/foo/{bar}');
       expect(requestPath.route.handler).toBeDefined();
       expect(requestPath.route.method).toEqual('GET');

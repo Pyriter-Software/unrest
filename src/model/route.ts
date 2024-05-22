@@ -7,11 +7,15 @@ export type MethodStringLiteral = 'get' | 'GET';
 export type RequestProps<T> = {
   request: Request<T | any>;
   route: Route;
-  params: string[][];
+  urlParams: UrlParams;
   queryStringParams: QueryStringParams;
 };
 
 export type QueryStringParams = {
+  [key: string]: string;
+};
+
+export type UrlParams = {
   [key: string]: string;
 };
 

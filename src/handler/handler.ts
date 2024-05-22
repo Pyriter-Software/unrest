@@ -4,7 +4,6 @@ import { RoutingTrie } from '../action/routingTrie';
 import { MethodType } from '../model/methodType';
 import { Request } from '../model/request';
 import { Response } from '../model/response';
-import { convertToObjectQueryStringParams } from '../utils';
 
 export interface Props {
   routingTable: Map<string, Route[]>;
@@ -45,18 +44,13 @@ export class Handler {
       throw new Error('Unable to determine route from path');
     }
 
-    const { route, params, queryStringParams } = requestPath;
-    const convertedQueryStringParams =
-      convertToObjectQueryStringParams(queryStringParams);
+    const { route, urlParams, queryStringParams } = requestPath;
 
     const response = await route.handler.call(route.thisReference, {
       request,
       route,
-      params,
-      queryStringParams: {
-        ...request.queryStringParams,
-        ...convertedQueryStringParams,
-      },
+      urlParams,
+      queryStringParams,
     });
 
     const statusCode = response.statusCode;

@@ -1,11 +1,11 @@
-import { Route } from '../model/route';
+import { QueryStringParams, Route, UrlParams } from '../model/route';
 
 export class RequestPath {
   constructor(
     public path: string,
     public route: Route,
-    public params: string[][],
-    public queryStringParams: string[][],
+    public urlParams: UrlParams,
+    public queryStringParams: QueryStringParams,
   ) {}
 
   static builder() {
@@ -16,8 +16,8 @@ export class RequestPath {
 class RequestPathBuilder {
   private path?: string;
   private route?: Route;
-  private params: string[][] = [];
-  private queryStringParams: string[][] = [];
+  private params: UrlParams = {};
+  private queryStringParams: QueryStringParams = {};
 
   withPath(path: string) {
     this.path = path;
@@ -30,7 +30,7 @@ class RequestPathBuilder {
   }
 
   withParam(key: string, value: string) {
-    this.params.push([key, value]);
+    this.params[key] = value;
     return this;
   }
 
@@ -39,7 +39,7 @@ class RequestPathBuilder {
     const tokens = queryString.split('&');
     for (const token of tokens) {
       const [key, value] = token.split('=');
-      this.queryStringParams.push([key, value]);
+      this.queryStringParams[key] = value;
     }
     return this;
   }
