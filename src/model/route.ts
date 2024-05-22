@@ -22,7 +22,9 @@ export type UrlParams = {
 export interface Route {
   argumentNames?: [];
 
-  handler<T, K>(props: RequestProps<T>): Promise<Response<K>>;
+  handler<T, K>(
+    props: RequestProps<T> | RequestProps<any>,
+  ): Promise<Response<K>>;
 
   method: MethodType | MethodStringLiteral;
 
