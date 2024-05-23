@@ -5,6 +5,7 @@
   "main": "dist/main.js",
   "type": "module",
   "typings": "dist/main.d.ts",
+  "keywords": ["request routing", "aws lambda request routing", "request", "route", "rest api", "api"],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/pyriter/unrest.git"

@@ -89,7 +89,9 @@ export class Unrest {
   private async callHandler<T>(context: Context<T>): Promise<void> {
     const { responseBuilder, request } = context;
     try {
-      const handler = this.handlers.find((h) => h.canHandle(request));
+      const handler = this.handlers.find((h) =>
+        h.canHandleThenUpdateWithRequestPath(request),
+      );
       if (handler) {
         const { statusCode, body } = await handler.handle(request);
         responseBuilder.withStatusCode(statusCode).withBody(body);

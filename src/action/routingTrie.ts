@@ -135,7 +135,16 @@ export class RoutingTrie {
     return requestPathBuilder.withRoute(currentNode.route).build();
   }
 
-  has(path: string): boolean {
-    return this.get(path) != null;
+  has(path: string): HasPathInfo {
+    const requestPath = this.get(path);
+    return {
+      hasPath: requestPath != null,
+      requestPath,
+    };
   }
 }
+
+export type HasPathInfo = {
+  hasPath: boolean;
+  requestPath?: RequestPath | undefined | null;
+};

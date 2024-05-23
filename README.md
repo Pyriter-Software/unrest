@@ -38,7 +38,7 @@ Set the `"noStrictGenericChecks"` to true in your tsconfig to avoid typescript e
 
 ## Usage
 
-### Simple HTTP GET example
+### Simple HTTP GET examples
 
 ```typescript
 import { StatusType, Unrest } from "@pyriter/unrest";
@@ -53,6 +53,22 @@ class ApiServiceHandler {
         method: MethodType.GET,
         path: "/api/v1/ping",
         handler: async (): Promise<Response> => {
+          return Response.builder()
+            .withStatusCode(StatusType.OK)
+            .withBody({
+              message: "success"
+            }).build();
+        }
+      })
+      .withRoute({
+        method: MethodType.GET,
+        path: "/api/v1/user/{userId}",
+        handler: async (props: RequestProps<undefined>): Promise<Response> => {
+          const { urlParams } = props;
+          const { userId } = urlParams;
+          
+          console.log(`The user id from request is `, userId);
+
           return Response.builder()
             .withStatusCode(StatusType.OK)
             .withBody({
@@ -110,3 +126,13 @@ const unrest = Unrest.builder()
   })
   .build();
 ```
+
+### Documentation
+
+### Unrest
+
+The routing library itself. It can execute an APIGatewayEvent and invoke the desired controller.
+
+### Unrest.builder()
+
+Returns the builder for creating an instance of the unrest object.

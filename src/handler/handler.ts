@@ -1,4 +1,3 @@
-import { RequestPath } from './requestPath';
 import { Route } from '../model/route';
 import { RoutingTrie } from '../action/routingTrie';
 import { MethodType } from '../model/methodType';
@@ -26,20 +25,23 @@ export class Handler {
     return request.method === this.method;
   }
 
-  canHandle<T>(request: Request<T>): boolean {
-    return this.canHandleMethod(request) && this.hasRoute(request);
+  canHandleThenUpdateWithRequestPath<T>(request: Request<T>): boolean {
+    return (
+      this.canHandleMethod(request) &&
+      this.hasRouteThenUpdateWithRequestPath(request)
+    );
   }
 
-  hasRoute<T>(request: Request<T>): boolean {
-    return this.routingTrie.has(request.path);
-  }
-
-  getRequestPath<T>(request: Request<T>): RequestPath | null | undefined {
-    return this.routingTrie.get(request.path);
+  hasRouteThenUpdateWithRequestPath<T>(request: Request<T>): boolean {
+    const { hasPath, requestPath } = this.routingTrie.has(request.path);
+    if (hasPath) {
+      request.requestPath = requestPath;
+    }
+    return hasPath;
   }
 
   async handle<T, K>(request: Request<T>): Promise<Response<K>> {
-    const requestPath = this.getRequestPath(request);
+    const { requestPath } = request;
     if (!requestPath) {
       throw new Error('Unable to determine route from path');
     }

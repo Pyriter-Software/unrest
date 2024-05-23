@@ -1,5 +1,6 @@
 import { MethodType } from './methodType';
 import { QueryStringParams, UrlParams } from './route';
+import { RequestPath } from '../handler';
 
 export interface Request<T> {
   origin?: string;
@@ -8,4 +9,5 @@ export interface Request<T> {
   urlParams: UrlParams;
   body?: T | string | null | undefined;
   queryStringParams: QueryStringParams;
+  requestPath?: RequestPath | null | undefined;
 }
