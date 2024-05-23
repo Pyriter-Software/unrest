@@ -1,11 +1,18 @@
 {
   "name": "@pyriter/unrest",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Request routing library for NodeJs. Written for AWS lambda.",
   "main": "dist/main.js",
   "type": "module",
   "typings": "dist/main.d.ts",
-  "keywords": ["request routing", "aws lambda request routing", "request", "route", "rest api", "api"],
+  "keywords": [
+    "request routing",
+    "aws lambda request routing",
+    "request",
+    "route",
+    "rest api",
+    "api"
+  ],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/pyriter/unrest.git"
