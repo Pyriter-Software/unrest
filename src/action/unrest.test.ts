@@ -57,6 +57,22 @@ describe('unrest', () => {
       method: MethodType.GET,
       path: '/hello/{id}',
     })
+    .withRoute({
+      handler: (
+        props: RequestProps<null>,
+      ): Promise<Response<TestBody>> => {
+        const response = Response.builder<TestBody>()
+          .withStatusCode(200)
+          .withBody({
+            params: props.urlParams,
+            queryStringParams: props.queryStringParams,
+          })
+          .build();
+        return Promise.resolve(response);
+      },
+      method: MethodType.GET,
+      path: '/foo/{id}/bar',
+    })
     .withHeader({
       key: 'Access-Control-Allow-Origin',
       value: 'http://localhost',
@@ -125,6 +141,27 @@ describe('unrest', () => {
     const event = {
       httpMethod: 'GET',
       path: '/hello/123',
+      body: 'success',
+    } as APIGatewayProxyEvent;
+    const response = await unrest.execute<string>(event);
+
+    const expectedBody = JSON.stringify({
+      params: { id: '123' },
+      queryStringParams: {},
+    });
+
+    expect(response).toBeDefined();
+    expect(response.body).toEqual(expectedBody);
+    expect(response.headers).toEqual({
+      'Access-Control-Allow-Origin': 'http://localhost',
+    });
+    expect(response.statusCode).toEqual(200);
+  });
+
+  test('get with url params in between two', async () => {
+    const event = {
+      httpMethod: 'GET',
+      path: '/foo/123/bar',
       body: 'success',
     } as APIGatewayProxyEvent;
     const response = await unrest.execute<string>(event);

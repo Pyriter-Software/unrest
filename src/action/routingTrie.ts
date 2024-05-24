@@ -115,14 +115,14 @@ export class RoutingTrie {
         return null; // Invalid path
       }
 
-      const nextIndex = i + 1;
+      const nextIndex = currentNode.value === '*' ? i : i + 1;
       if (nextIndex >= path.length || path[i] === '?') break;
 
       // Next character operation
       const nextChar = path[nextIndex];
-      const nextNode =
-        children.find((node) => node.value === '*') ||
-        children.find((node) => node.value === nextChar);
+      const nextNode = children.find((node) =>
+        ['*', nextChar].includes(node.value),
+      );
 
       if (nextNode == null) return null;
 
