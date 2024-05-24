@@ -1,6 +1,6 @@
 {
   "name": "@pyriter/unrest",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Request routing library for NodeJs. Written for AWS lambda.",
   "main": "dist/main.js",
   "type": "module",
