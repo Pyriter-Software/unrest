@@ -1,14 +1,13 @@
 import { MethodType } from './methodType';
 import { Response } from './response';
-import { Request } from './request';
 
 export type MethodStringLiteral = 'get' | 'GET';
 
 export type RequestProps<T> = {
-  request: Request<T | any>;
   route: Route;
   urlParams: UrlParams;
   queryStringParams: QueryStringParams;
+  body: T;
 };
 
 export type QueryStringParams = {

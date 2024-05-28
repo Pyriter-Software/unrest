@@ -19,7 +19,7 @@ describe('unrest', () => {
     })
     .withRoute({
       handler: (props: RequestProps<string>) => {
-        const { body } = props.request;
+        const { body } = props;
         const response = Response.builder<string>()
           .withStatusCode(200)
           .withBody(body)
@@ -31,7 +31,7 @@ describe('unrest', () => {
     })
     .withRoute({
       handler: (props: RequestProps<string>) => {
-        const { body } = props.request;
+        const { body } = props;
         const response: Response<string> = Response.builder<string>()
           .withStatusCode(200)
           .withBody(body)

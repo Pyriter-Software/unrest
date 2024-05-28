@@ -41,7 +41,7 @@ export class Handler {
   }
 
   async handle<T, K>(request: Request<T>): Promise<Response<K>> {
-    const { requestPath } = request;
+    const { requestPath, body: requestBody } = request;
     if (!requestPath) {
       throw new Error('Unable to determine route from path');
     }
@@ -53,6 +53,7 @@ export class Handler {
       route,
       urlParams,
       queryStringParams,
+      body: requestBody,
     });
 
     const statusCode = response.statusCode;
