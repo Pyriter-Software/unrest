@@ -29,7 +29,7 @@ Set the `"noStrictGenericChecks"` to true in your tsconfig to avoid typescript e
 {
   "compilerOptions": {
     ...
-    "noStrictGenericChecks": true
+    "noStrictGenericChecks": true,
     ...
   }
 }
@@ -42,7 +42,9 @@ Set the `"noStrictGenericChecks"` to true in your tsconfig to avoid typescript e
 
 ```typescript
 import { StatusType, Unrest } from "@pyriter/unrest";
-import { APIGatewayProxyEvent, APIGatewayProxyStructuredResultV2 } from "aws-lambda";
+import { APIGatewayProxyEvent } from "aws-lambda";
+import { UnrestResponse } from "./unrestResponse";
+import { RequestProps } from "./route";
 
 class ApiServiceHandler {
   private readonly unrest: Unrest;
@@ -66,8 +68,40 @@ class ApiServiceHandler {
         handler: async (props: RequestProps<undefined>): Promise<Response> => {
           const { urlParams } = props;
           const { userId } = urlParams;
-          
+
           console.log(`The user id from request is `, userId);
+
+          return Response.builder()
+            .withStatusCode(StatusType.OK)
+            .withBody({
+              message: "success"
+            }).build();
+        }
+      })
+      .withRoute({
+        method: MethodType.POST,
+        path: "/api/v1/user/{userId}",
+        handler: async (props: RequestProps<User>): Promise<Response> => {
+          const { urlParams, body } = props;
+          const { userId } = urlParams;
+
+          console.log(`The user id from request is `, userId);
+          console.log(`The user object from the request body is `, body);
+
+          return Response.builder()
+            .withStatusCode(StatusType.OK)
+            .withBody({
+              message: "success"
+            }).build();
+        }
+      })
+      .withRoute({
+        method: MethodType.GET,
+        path: "/api/v1/quote",
+        handler: async (props: RequestProps<undefined>): Promise<Response> => {
+
+          const { queryStringParams } = props;
+          console.log(`query string params from request url`, queryStringParams);
 
           return Response.builder()
             .withStatusCode(StatusType.OK)
@@ -80,7 +114,7 @@ class ApiServiceHandler {
   }
 
   async handle(event: APIGatewayProxyEvent):
-    Promise<APIGatewayProxyStructuredResultV2> {
+    Promise<UnrestResponse> {
     return await this.unrest.execute(event);
   }
 }
@@ -127,7 +161,7 @@ const unrest = Unrest.builder()
   .build();
 ```
 
-### Documentation
+### API
 
 ### Unrest
 
@@ -136,3 +170,4 @@ The routing library itself. It can execute an APIGatewayEvent and invoke the des
 ### Unrest.builder()
 
 Returns the builder for creating an instance of the unrest object.
+
