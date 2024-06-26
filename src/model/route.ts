@@ -12,6 +12,8 @@ export type RequestProps<T> = {
   body: T;
   headers: Headers;
   apiGatewayEvent: APIGatewayEvent;
+  path: string;
+  method: string;
 };
 
 export type QueryStringParams = {
