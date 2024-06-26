@@ -13,7 +13,7 @@ export type RequestProps<T> = {
   headers: Headers;
   apiGatewayEvent: APIGatewayEvent;
   path: string;
-  method: string;
+  method: MethodType;
 };
 
 export type QueryStringParams = {
