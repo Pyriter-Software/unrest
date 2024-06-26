@@ -1,5 +1,7 @@
 import { MethodType } from './methodType';
 import { Response } from './response';
+import { Headers } from './request';
+import { APIGatewayEvent } from 'aws-lambda';
 
 export type MethodStringLiteral = 'get' | 'GET';
 
@@ -8,6 +10,8 @@ export type RequestProps<T> = {
   urlParams: UrlParams;
   queryStringParams: QueryStringParams;
   body: T;
+  headers: Headers;
+  apiGatewayEvent: APIGatewayEvent;
 };
 
 export type QueryStringParams = {

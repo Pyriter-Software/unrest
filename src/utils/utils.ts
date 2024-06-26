@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { MethodType, QueryStringParams } from '../model';
+import { Headers } from '../model';
 
 export function extractOrigin(
   event: APIGatewayProxyEvent,
@@ -54,4 +55,9 @@ export function convertToObjectQueryStringParams(
     queryStringParams[key] = value;
   });
   return queryStringParams;
+}
+
+export function extractHeaders(event: APIGatewayProxyEvent): Headers {
+  // @ts-ignore
+  return event && event.headers ? event.headers : {};
 }

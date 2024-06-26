@@ -4,6 +4,7 @@ import { Header } from '../model/header';
 import { Context } from '../model/context';
 import {
   extractBody,
+  extractHeaders,
   extractMethod,
   extractOrigin,
   extractPath,
@@ -67,6 +68,7 @@ export class Unrest {
     const body = extractBody<T>(event);
     const method = extractMethod(event);
     const queryStringParams = extractQueryStringParams(event);
+    const headers = extractHeaders(event);
 
     return {
       origin,
@@ -75,6 +77,8 @@ export class Unrest {
       body,
       queryStringParams,
       urlParams: {},
+      headers,
+      apiGatewayEvent: event,
     };
   }
 
