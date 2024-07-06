@@ -96,9 +96,15 @@ export class Unrest {
       const handler = this.handlers.find((h) =>
         h.canHandleThenUpdateWithRequestPath(request),
       );
+      responseBuilder.withHeaders(request.headers);
       if (handler) {
-        const { statusCode, body } = await handler.handle(request);
-        responseBuilder.withStatusCode(statusCode).withBody(body);
+        const { statusCode, body, headers } = await handler.handle(
+          request,
+        );
+        responseBuilder
+          .withStatusCode(statusCode)
+          .withBody(body)
+          .withHeaders(headers);
       } else {
         const message = JSON.stringify({
           message: 'Not found',

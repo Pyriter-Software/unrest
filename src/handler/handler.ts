@@ -44,7 +44,7 @@ export class Handler {
     const {
       requestPath,
       body: requestBody,
-      headers,
+      headers: requestHeaders,
       apiGatewayEvent,
       path,
       method,
@@ -60,7 +60,7 @@ export class Handler {
       urlParams,
       queryStringParams,
       body: requestBody,
-      headers,
+      headers: requestHeaders,
       apiGatewayEvent,
       path,
       method,
@@ -68,10 +68,15 @@ export class Handler {
 
     const statusCode = response.statusCode;
     const body = response.body as K;
+    const responseHeaders = response.headers;
 
     return Response.builder<K>()
       .withStatusCode(statusCode)
       .withBody(body)
+      .withHeaders({
+        ...requestHeaders,
+        ...responseHeaders,
+      })
       .build() as any;
   }
 }

@@ -67,6 +67,7 @@ describe('unrest', () => {
             params: props.urlParams,
             queryStringParams: props.queryStringParams,
           })
+          .withHeader('foo', 'bar')
           .build();
         return Promise.resolve(response);
       },
@@ -175,6 +176,7 @@ describe('unrest', () => {
     expect(response.body).toEqual(expectedBody);
     expect(response.headers).toEqual({
       'Access-Control-Allow-Origin': 'http://localhost',
+      foo: 'bar',
     });
     expect(response.statusCode).toEqual(200);
   });

@@ -78,6 +78,14 @@ export class ResponseBuilder<K> {
     return this;
   }
 
+  withHeaders(headers: ResponseHeaders): ResponseBuilder<K> {
+    this.headers = {
+      ...this.headers,
+      ...headers,
+    };
+    return this;
+  }
+
   build(): Response<K> {
     if (this.statusCode == null) {
       throw new Error('statusCode must be defined');
