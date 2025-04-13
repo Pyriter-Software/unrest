@@ -48,7 +48,7 @@ export class Handler {
       apiGatewayEvent,
       path,
       method,
-      queryStringParams
+      queryStringParams,
     } = request;
     if (!requestPath) {
       throw new Error('Unable to determine route from path');
