@@ -184,9 +184,12 @@ describe('unrest', () => {
   test('get with querystring params', async () => {
     const event = {
       httpMethod: 'GET',
-      path: '/hello/myId?value1=123&value2=345',
-      body: 'success',
-    } as APIGatewayProxyEvent;
+      path: '/hello/myId',
+      queryStringParameters: {
+        value1: '123',
+        value2: '345',
+      },
+    } as unknown as APIGatewayProxyEvent;
     const response = await unrest.execute<string>(event);
 
     const expectedBody = JSON.stringify({

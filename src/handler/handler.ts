@@ -48,12 +48,13 @@ export class Handler {
       apiGatewayEvent,
       path,
       method,
+      queryStringParams
     } = request;
     if (!requestPath) {
       throw new Error('Unable to determine route from path');
     }
 
-    const { route, urlParams, queryStringParams } = requestPath;
+    const { route, urlParams } = requestPath;
 
     const response = await route.handler.call(route.thisReference, {
       route,
