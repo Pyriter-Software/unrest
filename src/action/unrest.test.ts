@@ -207,18 +207,20 @@ describe('unrest', () => {
 
   test('withRoutes should add new routes dynamically', async () => {
     const dynamicUnrest = Unrest.builder().build();
-    
-    dynamicUnrest.withRoutes([{
-      handler: () => {
-        const response = Response.builder<string>()
-          .withStatusCode(200)
-          .withBody('dynamic route')
-          .build();
-        return Promise.resolve(response);
+
+    dynamicUnrest.withRoutes([
+      {
+        handler: () => {
+          const response = Response.builder<string>()
+            .withStatusCode(200)
+            .withBody('dynamic route')
+            .build();
+          return Promise.resolve(response);
+        },
+        method: MethodType.GET,
+        path: '/dynamic',
       },
-      method: MethodType.GET,
-      path: '/dynamic',
-    }]);
+    ]);
 
     const event = {
       httpMethod: 'GET',
@@ -232,17 +234,19 @@ describe('unrest', () => {
 
   test('UnrestBuilder withRoutes should work', async () => {
     const builderUnrest = Unrest.builder()
-      .withRoutes([{
-        handler: () => {
-          const response = Response.builder<string>()
-            .withStatusCode(200)
-            .withBody('builder routes')
-            .build();
-          return Promise.resolve(response);
+      .withRoutes([
+        {
+          handler: () => {
+            const response = Response.builder<string>()
+              .withStatusCode(200)
+              .withBody('builder routes')
+              .build();
+            return Promise.resolve(response);
+          },
+          method: MethodType.GET,
+          path: '/builder',
         },
-        method: MethodType.GET,
-        path: '/builder',
-      }])
+      ])
       .build();
 
     const event = {
