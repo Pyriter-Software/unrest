@@ -204,6 +204,56 @@ describe('unrest', () => {
     expect(response.body).toEqual(expectedBody);
     expect(response.statusCode).toEqual(200);
   });
+
+  test('withRoutes should add new routes dynamically', async () => {
+    const dynamicUnrest = Unrest.builder().build();
+    
+    dynamicUnrest.withRoutes([{
+      handler: () => {
+        const response = Response.builder<string>()
+          .withStatusCode(200)
+          .withBody('dynamic route')
+          .build();
+        return Promise.resolve(response);
+      },
+      method: MethodType.GET,
+      path: '/dynamic',
+    }]);
+
+    const event = {
+      httpMethod: 'GET',
+      path: '/dynamic',
+    } as APIGatewayProxyEvent;
+    const response = await dynamicUnrest.execute<string>(event);
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toEqual('dynamic route');
+  });
+
+  test('UnrestBuilder withRoutes should work', async () => {
+    const builderUnrest = Unrest.builder()
+      .withRoutes([{
+        handler: () => {
+          const response = Response.builder<string>()
+            .withStatusCode(200)
+            .withBody('builder routes')
+            .build();
+          return Promise.resolve(response);
+        },
+        method: MethodType.GET,
+        path: '/builder',
+      }])
+      .build();
+
+    const event = {
+      httpMethod: 'GET',
+      path: '/builder',
+    } as APIGatewayProxyEvent;
+    const response = await builderUnrest.execute<string>(event);
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toEqual('builder routes');
+  });
 });
 
 type TestBody = {

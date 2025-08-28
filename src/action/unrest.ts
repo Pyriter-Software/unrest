@@ -26,19 +26,32 @@ export class Unrest {
     return new UnrestBuilder();
   }
 
-  private readonly handlers: Handler[];
+  private handlers: Handler[] = [];
   private readonly routingTable = new Map<string, Route[]>();
   private readonly headers: Header[] = [];
+  private routes: Route[] = [];
 
   constructor(props: UnrestProps) {
-    this.buildRoutingTable(props.routes);
+    this.routes = [...props.routes];
+    this.initializeHandlers();
+    this.headers = this.headers.concat(props.headers);
+  }
+
+  withRoutes(routes: Route[]): Unrest {
+    this.routes = [...this.routes, ...routes];
+    this.routingTable.clear();
+    this.initializeHandlers();
+    return this;
+  }
+
+  private initializeHandlers() {
+    this.buildRoutingTable(this.routes);
     this.handlers = Object.values(MethodType).map((method) => {
       return new Handler({
         method,
         routingTable: this.routingTable,
       });
     });
-    this.headers = this.headers.concat(props.headers);
   }
 
   async execute<T>(event: APIGatewayProxyEvent): Promise<UnrestResponse> {
@@ -127,6 +140,11 @@ class UnrestBuilder {
 
   withRoute(route: Route) {
     this.routes.push(route);
+    return this;
+  }
+
+  withRoutes(routes: Route[]) {
+    this.routes = [...this.routes, ...routes];
     return this;
   }
 
