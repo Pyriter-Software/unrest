@@ -96,16 +96,16 @@ export class RoutingTrie {
       .withPath(pathWithoutQueryString)
       .withQueryString(queryString);
 
-    while (i < path.length) {
-      const char = path[i];
+    while (i < pathWithoutQueryString.length) {
+      const char = pathWithoutQueryString[i];
       const { value, children, wildCardKey } = currentNode;
 
       if (value === '*') {
         // If value is * then we want to gobble update all the text in the request path a
         const paramBuilder: string[] = [];
-        while (i < path.length) {
-          if (path[i] === '/' || path[i] === '?') break;
-          paramBuilder.push(path[i]);
+        while (i < pathWithoutQueryString.length) {
+          if (pathWithoutQueryString[i] === '/') break;
+          paramBuilder.push(pathWithoutQueryString[i]);
           i++;
         }
         const param = paramBuilder.join('');
@@ -116,10 +116,10 @@ export class RoutingTrie {
       }
 
       const nextIndex = currentNode.value === '*' ? i : i + 1;
-      if (nextIndex >= path.length || path[i] === '?') break;
+      if (nextIndex >= pathWithoutQueryString.length) break;
 
       // Next character operation
-      const nextChar = path[nextIndex];
+      const nextChar = pathWithoutQueryString[nextIndex];
       const nextNode = children.find((node) =>
         ['*', nextChar].includes(node.value),
       );

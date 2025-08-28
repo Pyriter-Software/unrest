@@ -65,6 +65,24 @@ describe('routingTrie', () => {
       expect(requestPath.route.handler).toBeDefined();
       expect(requestPath.route.method).toEqual('GET');
     });
+
+    test('get route with query string parameters', () => {
+      const requestPath = routingTrie.get('/foo?param1=value1&param2=value2')!!;
+
+      expect(requestPath.path).toEqual('/foo');
+      expect(Object.keys(requestPath.urlParams).length).toEqual(0);
+      expect(requestPath.route).toBeDefined();
+      expect(requestPath.route.method).toEqual('GET');
+    });
+
+    test('get route with url params and query string', () => {
+      const requestPath = routingTrie.get('/foo/123?param=value')!!;
+
+      expect(requestPath.path).toEqual('/foo/123');
+      expect(Object.keys(requestPath.urlParams).length).toEqual(1);
+      expect(requestPath.urlParams['bar']).toEqual('123');
+      expect(requestPath.route.path).toEqual('/foo/{bar}');
+    });
   });
   describe('has', () => {
     test('should get basic route', () => {
@@ -77,6 +95,14 @@ describe('routingTrie', () => {
 
     test('get route with one argument that is also the argument name', () => {
       expect(routingTrie.has('/foo/{bar}')).toBeTruthy();
+    });
+
+    test('should handle query string parameters', () => {
+      expect(routingTrie.has('/foo?param=value')).toBeTruthy();
+    });
+
+    test('should handle url params with query string', () => {
+      expect(routingTrie.has('/foo/123?param=value')).toBeTruthy();
     });
   });
 });
