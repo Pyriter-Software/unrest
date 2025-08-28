@@ -67,7 +67,9 @@ describe('routingTrie', () => {
     });
 
     test('get route with query string parameters', () => {
-      const requestPath = routingTrie.get('/foo?param1=value1&param2=value2')!!;
+      const requestPath = routingTrie.get(
+        '/foo?param1=value1&param2=value2',
+      )!!;
 
       expect(requestPath.path).toEqual('/foo');
       expect(Object.keys(requestPath.urlParams).length).toEqual(0);
