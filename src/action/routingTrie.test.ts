@@ -7,41 +7,49 @@ describe('routingTrie', () => {
   describe('route validation', () => {
     test('should throw error for unmatched opening brace', () => {
       expect(() => {
-        new RoutingTrie([{
-          handler: () => Promise.resolve({} as Response<undefined>),
-          path: '/foo/{bar',
-          method: 'GET',
-        }]);
+        new RoutingTrie([
+          {
+            handler: () => Promise.resolve({} as Response<undefined>),
+            path: '/foo/{bar',
+            method: 'GET',
+          },
+        ]);
       }).toThrow('Unmatched braces in path: /foo/{bar');
     });
 
     test('should throw error for unmatched closing brace', () => {
       expect(() => {
-        new RoutingTrie([{
-          handler: () => Promise.resolve({} as Response<undefined>),
-          path: '/foo/bar}',
-          method: 'GET',
-        }]);
+        new RoutingTrie([
+          {
+            handler: () => Promise.resolve({} as Response<undefined>),
+            path: '/foo/bar}',
+            method: 'GET',
+          },
+        ]);
       }).toThrow('Unmatched braces in path: /foo/bar}');
     });
 
     test('should throw error for empty parameter name', () => {
       expect(() => {
-        new RoutingTrie([{
-          handler: () => Promise.resolve({} as Response<undefined>),
-          path: '/foo/{}',
-          method: 'GET',
-        }]);
+        new RoutingTrie([
+          {
+            handler: () => Promise.resolve({} as Response<undefined>),
+            path: '/foo/{}',
+            method: 'GET',
+          },
+        ]);
       }).toThrow('Empty parameter name in path: /foo/{}');
     });
 
     test('should throw error for nested braces', () => {
       expect(() => {
-        new RoutingTrie([{
-          handler: () => Promise.resolve({} as Response<undefined>),
-          path: '/foo/{{bar}}',
-          method: 'GET',
-        }]);
+        new RoutingTrie([
+          {
+            handler: () => Promise.resolve({} as Response<undefined>),
+            path: '/foo/{{bar}}',
+            method: 'GET',
+          },
+        ]);
       }).toThrow('Nested braces not allowed in path: /foo/{{bar}}');
     });
   });

@@ -22,19 +22,19 @@ export class RoutingTrie {
 
   private validateRoute(route: Route) {
     const { path } = route;
-    
+
     // Check for unmatched braces
     const openBraces = (path.match(/\{/g) || []).length;
     const closeBraces = (path.match(/\}/g) || []).length;
     if (openBraces !== closeBraces) {
       throw new Error(`Unmatched braces in path: ${path}`);
     }
-    
+
     // Check for empty parameter names
     if (path.includes('{}')) {
       throw new Error(`Empty parameter name in path: ${path}`);
     }
-    
+
     // Check for nested braces
     if (path.includes('{{') || path.includes('}}')) {
       throw new Error(`Nested braces not allowed in path: ${path}`);
@@ -75,7 +75,7 @@ export class RoutingTrie {
             keyBuilder.push(path[i]);
             i++;
           }
-          
+
           const key = keyBuilder.join('');
           if (i >= path.length || path[i] !== '}') {
             throw new Error(
