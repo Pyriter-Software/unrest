@@ -20,8 +20,31 @@ export class RoutingTrie {
     routes.forEach((route) => this.insert(route));
   }
 
+  private validateRoute(route: Route) {
+    const { path } = route;
+    
+    // Check for unmatched braces
+    const openBraces = (path.match(/\{/g) || []).length;
+    const closeBraces = (path.match(/\}/g) || []).length;
+    if (openBraces !== closeBraces) {
+      throw new Error(`Unmatched braces in path: ${path}`);
+    }
+    
+    // Check for empty parameter names
+    if (path.includes('{}')) {
+      throw new Error(`Empty parameter name in path: ${path}`);
+    }
+    
+    // Check for nested braces
+    if (path.includes('{{') || path.includes('}}')) {
+      throw new Error(`Nested braces not allowed in path: ${path}`);
+    }
+  }
+
   insert(route: Route) {
     const { path } = route;
+
+    this.validateRoute(route);
 
     if (path[0] !== '/') {
       throw new Error('Path must start with /');
@@ -48,14 +71,13 @@ export class RoutingTrie {
           // Get all the characters until '}' and store this string value to the arguments list
           i++;
           const keyBuilder: string[] = [];
-          while (path[i] !== '}') {
+          while (i < path.length && path[i] !== '}') {
             keyBuilder.push(path[i]);
             i++;
           }
-          const char2 = path[i];
-
+          
           const key = keyBuilder.join('');
-          if (char2 !== '}') {
+          if (i >= path.length || path[i] !== '}') {
             throw new Error(
               `An opening brace '{' must end with a closing brace for ${key}`,
             );
