@@ -261,7 +261,7 @@ describe('unrest', () => {
 
   test('withRoute should add single route dynamically', async () => {
     const dynamicUnrest = Unrest.builder().build();
-    
+
     dynamicUnrest.withRoute({
       handler: () => {
         const response = Response.builder<string>()
