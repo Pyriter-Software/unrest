@@ -37,6 +37,13 @@ export class Unrest {
     this.headers = this.headers.concat(props.headers);
   }
 
+  withRoute(route: Route): Unrest {
+    this.routes = [...this.routes, route];
+    this.routingTable.clear();
+    this.initializeHandlers();
+    return this;
+  }
+
   withRoutes(routes: Route[]): Unrest {
     this.routes = [...this.routes, ...routes];
     this.routingTable.clear();

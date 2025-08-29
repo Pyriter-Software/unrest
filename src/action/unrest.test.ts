@@ -258,6 +258,31 @@ describe('unrest', () => {
     expect(response.statusCode).toEqual(200);
     expect(response.body).toEqual('builder routes');
   });
+
+  test('withRoute should add single route dynamically', async () => {
+    const dynamicUnrest = Unrest.builder().build();
+    
+    dynamicUnrest.withRoute({
+      handler: () => {
+        const response = Response.builder<string>()
+          .withStatusCode(200)
+          .withBody('single route')
+          .build();
+        return Promise.resolve(response);
+      },
+      method: MethodType.POST,
+      path: '/single',
+    });
+
+    const event = {
+      httpMethod: 'POST',
+      path: '/single',
+    } as APIGatewayProxyEvent;
+    const response = await dynamicUnrest.execute<string>(event);
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toEqual('single route');
+  });
 });
 
 type TestBody = {
