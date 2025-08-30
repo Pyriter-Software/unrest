@@ -12,7 +12,9 @@ describe('Response', () => {
 
       expect(response.statusCode).toBe(StatusType.OK);
       expect(response.body).toBe('test body');
-      expect(response.headers).toEqual({ 'Content-Type': 'application/json' });
+      expect(response.headers).toEqual({
+        'Content-Type': 'application/json',
+      });
     });
 
     it('should handle undefined body', () => {
@@ -114,13 +116,18 @@ describe('Response', () => {
         .withHeader('Content-Type', 'application/json')
         .build();
 
-      expect(response.headers).toEqual({ 'Content-Type': 'application/json' });
+      expect(response.headers).toEqual({
+        'Content-Type': 'application/json',
+      });
     });
 
     it('should build response with multiple headers', () => {
       const response = new ResponseBuilder()
         .withStatusCode(StatusType.OK)
-        .withHeaders({ 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' })
+        .withHeaders({
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+        })
         .build();
 
       expect(response.headers).toEqual({

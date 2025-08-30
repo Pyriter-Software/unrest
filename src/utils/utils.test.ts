@@ -110,7 +110,9 @@ describe('Utils', () => {
     });
 
     it('should throw error when event is null', () => {
-      expect(() => extractMethod(null as any)).toThrow('httpMethod not defined');
+      expect(() => extractMethod(null as any)).toThrow(
+        'httpMethod not defined',
+      );
     });
   });
 
@@ -293,14 +295,14 @@ describe('Utils', () => {
       const event: APIGatewayProxyEvent = {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer token',
+          Authorization: 'Bearer token',
         },
       } as any;
 
       const result = extractHeaders(event);
       expect(result).toEqual({
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer token',
+        Authorization: 'Bearer token',
       });
     });
 

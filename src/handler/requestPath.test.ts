@@ -12,9 +12,17 @@ describe('RequestPath', () => {
   describe('RequestPath class', () => {
     it('should create RequestPath with correct properties', () => {
       const urlParams: UrlParams = { userId: '123' };
-      const queryStringParams: QueryStringParams = { limit: '10', offset: '0' };
+      const queryStringParams: QueryStringParams = {
+        limit: '10',
+        offset: '0',
+      };
 
-      const requestPath = new RequestPath('/api/v1/users/123', mockRoute, urlParams, queryStringParams);
+      const requestPath = new RequestPath(
+        '/api/v1/users/123',
+        mockRoute,
+        urlParams,
+        queryStringParams,
+      );
 
       expect(requestPath.path).toBe('/api/v1/users/123');
       expect(requestPath.route).toBe(mockRoute);
@@ -85,7 +93,10 @@ describe('RequestPath', () => {
         .withParam('orderId', '456')
         .build();
 
-      expect(requestPath.urlParams).toEqual({ userId: '123', orderId: '456' });
+      expect(requestPath.urlParams).toEqual({
+        userId: '123',
+        orderId: '456',
+      });
     });
 
     it('should handle empty query string', () => {
@@ -185,7 +196,10 @@ describe('RequestPath', () => {
       expect(requestPath.path).toBe('/api/v1/users/123');
       expect(requestPath.route).toBe(mockRoute);
       expect(requestPath.urlParams).toEqual({ userId: '123' });
-      expect(requestPath.queryStringParams).toEqual({ limit: '10', offset: '0' });
+      expect(requestPath.queryStringParams).toEqual({
+        limit: '10',
+        offset: '0',
+      });
     });
 
     it('should throw error when path is not defined', () => {
@@ -217,7 +231,9 @@ describe('RequestPath', () => {
       const requestPath = builder
         .withPath('/api/v1/users')
         .withRoute(mockRoute)
-        .withQueryString('limit=10&offset=0&sortBy=name&order=desc&filter=active&include=profile,orders')
+        .withQueryString(
+          'limit=10&offset=0&sortBy=name&order=desc&filter=active&include=profile,orders',
+        )
         .build();
 
       expect(requestPath.queryStringParams).toEqual({
@@ -242,8 +258,11 @@ describe('RequestPath', () => {
     });
 
     it('should handle very long query strings', () => {
-      const longQueryString = Array.from({ length: 100 }, (_, i) => `param${i}=value${i}`).join('&');
-      
+      const longQueryString = Array.from(
+        { length: 100 },
+        (_, i) => `param${i}=value${i}`,
+      ).join('&');
+
       const requestPath = builder
         .withPath('/api/v1/users')
         .withRoute(mockRoute)

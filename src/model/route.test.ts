@@ -1,4 +1,10 @@
-import { Route, RequestProps, QueryStringParams, UrlParams, MethodStringLiteral } from './route';
+import {
+  Route,
+  RequestProps,
+  QueryStringParams,
+  UrlParams,
+  MethodStringLiteral,
+} from './route';
 import { MethodType } from './methodType';
 import { Response } from './response';
 import { StatusType } from './statusType';
@@ -9,12 +15,14 @@ describe('Route', () => {
       const mockRoute: Route = {
         method: MethodType.GET,
         path: '/api/v1/users',
-        handler: jest.fn().mockResolvedValue(
-          Response.builder()
-            .withStatusCode(StatusType.OK)
-            .withBody('success')
-            .build()
-        ),
+        handler: jest
+          .fn()
+          .mockResolvedValue(
+            Response.builder()
+              .withStatusCode(StatusType.OK)
+              .withBody('success')
+              .build(),
+          ),
       };
 
       expect(mockRoute.method).toBe(MethodType.GET);
@@ -46,12 +54,14 @@ describe('Route', () => {
     });
 
     it('should handle handler with RequestProps<any>', async () => {
-      const mockHandler = jest.fn().mockResolvedValue(
-        Response.builder()
-          .withStatusCode(StatusType.OK)
-          .withBody('success')
-          .build()
-      );
+      const mockHandler = jest
+        .fn()
+        .mockResolvedValue(
+          Response.builder()
+            .withStatusCode(StatusType.OK)
+            .withBody('success')
+            .build(),
+        );
 
       const mockRoute: Route = {
         method: MethodType.GET,
@@ -76,12 +86,14 @@ describe('Route', () => {
     });
 
     it('should handle handler with RequestProps<undefined>', async () => {
-      const mockHandler = jest.fn().mockResolvedValue(
-        Response.builder()
-          .withStatusCode(StatusType.OK)
-          .withBody('success')
-          .build()
-      );
+      const mockHandler = jest
+        .fn()
+        .mockResolvedValue(
+          Response.builder()
+            .withStatusCode(StatusType.OK)
+            .withBody('success')
+            .build(),
+        );
 
       const mockRoute: Route = {
         method: MethodType.GET,
@@ -129,7 +141,9 @@ describe('Route', () => {
       expect(mockRequestProps.urlParams).toEqual({ userId: '123' });
       expect(mockRequestProps.queryStringParams).toEqual({ limit: '10' });
       expect(mockRequestProps.body).toBe('test body');
-      expect(mockRequestProps.headers).toEqual({ 'Content-Type': 'application/json' });
+      expect(mockRequestProps.headers).toEqual({
+        'Content-Type': 'application/json',
+      });
       expect(mockRequestProps.path).toBe('/api/v1/users/123');
       expect(mockRequestProps.method).toBe(MethodType.GET);
     });
@@ -301,12 +315,14 @@ describe('Route', () => {
 
   describe('Integration tests', () => {
     it('should create complete route with all properties and execute handler', async () => {
-      const mockHandler = jest.fn().mockResolvedValue(
-        Response.builder()
-          .withStatusCode(StatusType.OK)
-          .withBody({ message: 'User created' })
-          .build()
-      );
+      const mockHandler = jest
+        .fn()
+        .mockResolvedValue(
+          Response.builder()
+            .withStatusCode(StatusType.OK)
+            .withBody({ message: 'User created' })
+            .build(),
+        );
 
       const mockRoute: Route = {
         method: MethodType.POST,
@@ -316,7 +332,10 @@ describe('Route', () => {
         thisReference: { someMethod: jest.fn() },
       };
 
-      const mockRequestProps: RequestProps<{ name: string; email: string }> = {
+      const mockRequestProps: RequestProps<{
+        name: string;
+        email: string;
+      }> = {
         route: mockRoute,
         urlParams: { userId: '123' },
         queryStringParams: { include: 'profile' },
@@ -335,12 +354,14 @@ describe('Route', () => {
     });
 
     it('should handle route with minimal properties', async () => {
-      const mockHandler = jest.fn().mockResolvedValue(
-        Response.builder()
-          .withStatusCode(StatusType.OK)
-          .withBody('success')
-          .build()
-      );
+      const mockHandler = jest
+        .fn()
+        .mockResolvedValue(
+          Response.builder()
+            .withStatusCode(StatusType.OK)
+            .withBody('success')
+            .build(),
+        );
 
       const mockRoute: Route = {
         method: MethodType.GET,

@@ -20,7 +20,7 @@ describe('Header', () => {
       { key: 'User-Agent', value: 'Mozilla/5.0' },
     ];
 
-    headers.forEach(header => {
+    headers.forEach((header) => {
       expect(header.key).toBeDefined();
       expect(header.value).toBeDefined();
       expect(typeof header.key).toBe('string');
@@ -36,7 +36,7 @@ describe('Header', () => {
       { key: 'X-Forwarded-For', value: '192.168.1.1' },
     ];
 
-    customHeaders.forEach(header => {
+    customHeaders.forEach((header) => {
       expect(header.key.startsWith('X-')).toBe(true);
       expect(header.value).toBeDefined();
     });
@@ -60,7 +60,7 @@ describe('Header', () => {
       { key: 'X-Header-With-123', value: 'value4' },
     ];
 
-    headers.forEach(header => {
+    headers.forEach((header) => {
       expect(header.key).toBeDefined();
       expect(header.value).toBeDefined();
     });
@@ -69,12 +69,19 @@ describe('Header', () => {
   it('should handle special characters in values', () => {
     const headers: Header[] = [
       { key: 'Content-Type', value: 'application/json; charset=utf-8' },
-      { key: 'Accept', value: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' },
-      { key: 'Authorization', value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
+      {
+        key: 'Accept',
+        value:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      },
+      {
+        key: 'Authorization',
+        value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+      },
       { key: 'Cookie', value: 'session=abc123; user=john; theme=dark' },
     ];
 
-    headers.forEach(header => {
+    headers.forEach((header) => {
       expect(header.key).toBeDefined();
       expect(header.value).toBeDefined();
     });
@@ -165,8 +172,10 @@ describe('Header', () => {
       { key: 'Accept', value: 'application/json' },
     ];
 
-    const contentTypeHeaders = headers.filter(h => h.key === 'Content-Type');
-    const authHeaders = headers.filter(h => h.key === 'Authorization');
+    const contentTypeHeaders = headers.filter(
+      (h) => h.key === 'Content-Type',
+    );
+    const authHeaders = headers.filter((h) => h.key === 'Authorization');
 
     expect(contentTypeHeaders).toHaveLength(1);
     expect(authHeaders).toHaveLength(1);
@@ -180,8 +189,8 @@ describe('Header', () => {
       { key: 'Authorization', value: 'Bearer token' },
     ];
 
-    const keys = headers.map(h => h.key);
-    const values = headers.map(h => h.value);
+    const keys = headers.map((h) => h.key);
+    const values = headers.map((h) => h.value);
 
     expect(keys).toEqual(['Content-Type', 'Authorization']);
     expect(values).toEqual(['application/json', 'Bearer token']);
@@ -194,12 +203,22 @@ describe('Header', () => {
       { key: 'Accept', value: 'application/json' },
     ];
 
-    const contentTypeHeader = headers.find(h => h.key === 'Content-Type');
-    const authHeader = headers.find(h => h.key === 'Authorization');
-    const nonExistentHeader = headers.find(h => h.key === 'Non-Existent');
+    const contentTypeHeader = headers.find(
+      (h) => h.key === 'Content-Type',
+    );
+    const authHeader = headers.find((h) => h.key === 'Authorization');
+    const nonExistentHeader = headers.find(
+      (h) => h.key === 'Non-Existent',
+    );
 
-    expect(contentTypeHeader).toEqual({ key: 'Content-Type', value: 'application/json' });
-    expect(authHeader).toEqual({ key: 'Authorization', value: 'Bearer token' });
+    expect(contentTypeHeader).toEqual({
+      key: 'Content-Type',
+      value: 'application/json',
+    });
+    expect(authHeader).toEqual({
+      key: 'Authorization',
+      value: 'Bearer token',
+    });
     expect(nonExistentHeader).toBeUndefined();
   });
 
@@ -209,8 +228,8 @@ describe('Header', () => {
       { key: 'Authorization', value: 'Bearer token' },
     ];
 
-    const hasContentType = headers.some(h => h.key === 'Content-Type');
-    const hasNonExistent = headers.some(h => h.key === 'Non-Existent');
+    const hasContentType = headers.some((h) => h.key === 'Content-Type');
+    const hasNonExistent = headers.some((h) => h.key === 'Non-Existent');
 
     expect(hasContentType).toBe(true);
     expect(hasNonExistent).toBe(false);
@@ -222,8 +241,10 @@ describe('Header', () => {
       { key: 'Authorization', value: 'Bearer token' },
     ];
 
-    const allHaveKeys = headers.every(h => h.key && h.key.length > 0);
-    const allHaveValues = headers.every(h => h.value && h.value.length > 0);
+    const allHaveKeys = headers.every((h) => h.key && h.key.length > 0);
+    const allHaveValues = headers.every(
+      (h) => h.value && h.value.length > 0,
+    );
 
     expect(allHaveKeys).toBe(true);
     expect(allHaveValues).toBe(true);

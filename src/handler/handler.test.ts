@@ -14,12 +14,14 @@ describe('Handler', () => {
     mockRoute = {
       method: MethodType.GET,
       path: '/api/v1/users',
-      handler: jest.fn().mockResolvedValue(
-        Response.builder()
-          .withStatusCode(StatusType.OK)
-          .withBody('success')
-          .build()
-      ),
+      handler: jest
+        .fn()
+        .mockResolvedValue(
+          Response.builder()
+            .withStatusCode(StatusType.OK)
+            .withBody('success')
+            .build(),
+        ),
     };
 
     mockProps = {
@@ -77,7 +79,8 @@ describe('Handler', () => {
         apiGatewayEvent: {} as any,
       };
 
-      const result = handler.canHandleThenUpdateWithRequestPath(mockRequest);
+      const result =
+        handler.canHandleThenUpdateWithRequestPath(mockRequest);
       expect(result).toBe(true);
       expect(mockRequest.requestPath).toBeDefined();
     });
@@ -93,7 +96,8 @@ describe('Handler', () => {
         apiGatewayEvent: {} as any,
       };
 
-      const result = handler.canHandleThenUpdateWithRequestPath(mockRequest);
+      const result =
+        handler.canHandleThenUpdateWithRequestPath(mockRequest);
       expect(result).toBe(false);
     });
 
@@ -108,7 +112,8 @@ describe('Handler', () => {
         apiGatewayEvent: {} as any,
       };
 
-      const result = handler.canHandleThenUpdateWithRequestPath(mockRequest);
+      const result =
+        handler.canHandleThenUpdateWithRequestPath(mockRequest);
       expect(result).toBe(false);
     });
 
@@ -148,7 +153,7 @@ describe('Handler', () => {
       };
 
       await expect(handler.handle(mockRequest)).rejects.toThrow(
-        'Unable to determine route from path'
+        'Unable to determine route from path',
       );
     });
 
@@ -165,13 +170,15 @@ describe('Handler', () => {
           path: '/api/v1/users',
           route: {
             ...mockRoute,
-            handler: jest.fn().mockResolvedValue(
-              Response.builder()
-                .withStatusCode(StatusType.OK)
-                .withBody('success')
-                .withHeader('Content-Type', 'application/json')
-                .build()
-            ),
+            handler: jest
+              .fn()
+              .mockResolvedValue(
+                Response.builder()
+                  .withStatusCode(StatusType.OK)
+                  .withBody('success')
+                  .withHeader('Content-Type', 'application/json')
+                  .build(),
+              ),
           },
           urlParams: {},
           queryStringParams: {},
@@ -185,12 +192,14 @@ describe('Handler', () => {
     });
 
     it('should call route handler with correct parameters', async () => {
-      const mockHandler = jest.fn().mockResolvedValue(
-        Response.builder()
-          .withStatusCode(StatusType.OK)
-          .withBody('success')
-          .build()
-      );
+      const mockHandler = jest
+        .fn()
+        .mockResolvedValue(
+          Response.builder()
+            .withStatusCode(StatusType.OK)
+            .withBody('success')
+            .build(),
+        );
 
       const mockRouteWithHandler: Route = {
         ...mockRoute,
@@ -300,7 +309,8 @@ describe('Handler', () => {
         apiGatewayEvent: {} as any,
       };
 
-      const result = emptyHandler.hasRouteThenUpdateWithRequestPath(mockRequest);
+      const result =
+        emptyHandler.hasRouteThenUpdateWithRequestPath(mockRequest);
       expect(result).toBe(false);
     });
   });

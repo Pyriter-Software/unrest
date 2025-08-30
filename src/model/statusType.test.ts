@@ -42,21 +42,34 @@ describe('StatusType', () => {
   it('should categorize status codes correctly', () => {
     // 2xx Success
     expect(StatusType.OK >= 200 && StatusType.OK < 300).toBe(true);
-    expect(StatusType.CREATED >= 200 && StatusType.CREATED < 300).toBe(true);
+    expect(StatusType.CREATED >= 200 && StatusType.CREATED < 300).toBe(
+      true,
+    );
 
     // 4xx Client Error
-    expect(StatusType.BAD_REQUEST >= 400 && StatusType.BAD_REQUEST < 500).toBe(true);
-    expect(StatusType.UNAUTHORIZED >= 400 && StatusType.UNAUTHORIZED < 500).toBe(true);
-    expect(StatusType.FORBIDDEN >= 400 && StatusType.FORBIDDEN < 500).toBe(true);
-    expect(StatusType.NOT_FOUND >= 400 && StatusType.NOT_FOUND < 500).toBe(true);
+    expect(
+      StatusType.BAD_REQUEST >= 400 && StatusType.BAD_REQUEST < 500,
+    ).toBe(true);
+    expect(
+      StatusType.UNAUTHORIZED >= 400 && StatusType.UNAUTHORIZED < 500,
+    ).toBe(true);
+    expect(StatusType.FORBIDDEN >= 400 && StatusType.FORBIDDEN < 500).toBe(
+      true,
+    );
+    expect(StatusType.NOT_FOUND >= 400 && StatusType.NOT_FOUND < 500).toBe(
+      true,
+    );
 
     // 5xx Server Error
-    expect(StatusType.INTERNAL_SERVER_ERROR >= 500 && StatusType.INTERNAL_SERVER_ERROR < 600).toBe(true);
+    expect(
+      StatusType.INTERNAL_SERVER_ERROR >= 500 &&
+        StatusType.INTERNAL_SERVER_ERROR < 600,
+    ).toBe(true);
   });
 
   it('should work with conditional logic', () => {
     const status = StatusType.UNAUTHORIZED;
-    
+
     if (status >= 400 && status < 500) {
       expect(status).toBe(401);
     } else {
@@ -65,7 +78,11 @@ describe('StatusType', () => {
   });
 
   it('should work with array operations', () => {
-    const statuses = [StatusType.OK, StatusType.CREATED, StatusType.BAD_REQUEST];
+    const statuses = [
+      StatusType.OK,
+      StatusType.CREATED,
+      StatusType.BAD_REQUEST,
+    ];
     expect(statuses).toContain(200);
     expect(statuses).toContain(201);
     expect(statuses).toContain(400);

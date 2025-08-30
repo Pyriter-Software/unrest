@@ -57,7 +57,7 @@ describe('Context', () => {
       { event: {} as any, request: {} as any, responseBuilder: {} as any },
     ];
 
-    contexts.forEach(context => {
+    contexts.forEach((context) => {
       expect(context.event).toBeDefined();
       expect(context.request).toBeDefined();
       expect(context.responseBuilder).toBeDefined();
@@ -74,7 +74,7 @@ describe('Context', () => {
       { event: {} as any, request: {} as any, responseBuilder: {} as any },
     ];
 
-    contexts.forEach(context => {
+    contexts.forEach((context) => {
       expect(context.event).toBeDefined();
       expect(context.request).toBeDefined();
       expect(context.responseBuilder).toBeDefined();
@@ -182,7 +182,7 @@ describe('Context', () => {
 
     const values = Object.values(context);
     expect(values).toHaveLength(3);
-    expect(values.every(v => v !== undefined)).toBe(true);
+    expect(values.every((v) => v !== undefined)).toBe(true);
   });
 
   it('should work with Object.entries', () => {
@@ -194,7 +194,9 @@ describe('Context', () => {
 
     const entries = Object.entries(context);
     expect(entries).toHaveLength(3);
-    expect(entries.every(([key, value]) => key && value !== undefined)).toBe(true);
+    expect(
+      entries.every(([key, value]) => key && value !== undefined),
+    ).toBe(true);
   });
 
   it('should work with conditional logic', () => {
@@ -219,7 +221,9 @@ describe('Context', () => {
       { event: {} as any, request: {} as any, responseBuilder: {} as any },
     ];
 
-    const validContexts = contexts.filter(c => c.event && c.request && c.responseBuilder);
+    const validContexts = contexts.filter(
+      (c) => c.event && c.request && c.responseBuilder,
+    );
     expect(validContexts).toHaveLength(3);
   });
 });
